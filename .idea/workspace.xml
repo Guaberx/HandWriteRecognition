@@ -44,10 +44,13 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-172">
-              <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+            <state relative-caret-position="13">
+              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
+                <element signature="e#242#254#0" expanded="true" />
+                <element signature="e#316#328#0" expanded="true" />
+                <element signature="e#1111#1123#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -66,7 +69,7 @@
       <file leaf-file-name="BMPImageLoader.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BMPImageLoader.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
+            <state relative-caret-position="799">
               <caret line="121" column="0" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
               <folding>
                 <element signature="e#136#155#0" expanded="true" />
@@ -366,10 +369,10 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="100378000" />
+    <option name="totallyTimeSpent" value="100768000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1378" height="735" extended-state="0" />
+    <frame x="-7" y="0" width="1378" height="735" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13955224" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -436,6 +439,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#242#254#0" expanded="true" />
+            <element signature="e#316#328#0" expanded="true" />
+            <element signature="e#1111#1123#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -470,6 +476,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#242#254#0" expanded="true" />
+            <element signature="e#316#328#0" expanded="true" />
+            <element signature="e#1111#1123#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -504,6 +513,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#242#254#0" expanded="true" />
+            <element signature="e#316#328#0" expanded="true" />
+            <element signature="e#1111#1123#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -538,6 +550,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#242#254#0" expanded="true" />
+            <element signature="e#316#328#0" expanded="true" />
+            <element signature="e#1111#1123#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -572,6 +587,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#242#254#0" expanded="true" />
+            <element signature="e#316#328#0" expanded="true" />
+            <element signature="e#1111#1123#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -606,6 +624,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#242#254#0" expanded="true" />
+            <element signature="e#316#328#0" expanded="true" />
+            <element signature="e#1111#1123#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -640,6 +661,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#242#254#0" expanded="true" />
+            <element signature="e#316#328#0" expanded="true" />
+            <element signature="e#1111#1123#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -674,6 +698,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#242#254#0" expanded="true" />
+            <element signature="e#316#328#0" expanded="true" />
+            <element signature="e#1111#1123#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -727,14 +754,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/GraphTallerObjetos/Graph.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="72" column="13" selection-start-line="72" selection-start-column="13" selection-end-line="72" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/GraphTallerObjetos/Graph.h" />
     <entry file="file://$PROJECT_DIR$/Graph/Matrix/Matrix.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -747,7 +767,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-255">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -755,18 +774,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="146">
           <caret line="887" column="4" selection-start-line="887" selection-start-column="4" selection-end-line="887" selection-end-column="4" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BMPstructure.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/BMPstructure.cpp" />
     <entry file="file://$PROJECT_DIR$/Graph/Graph.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3026">
@@ -785,26 +796,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BMPImageLoader.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="121" column="0" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
-          <folding>
-            <element signature="e#136#155#0" expanded="true" />
-            <element signature="e#440#452#0" expanded="true" />
-            <element signature="e#682#694#0" expanded="true" />
-            <element signature="e#673#2783#0" expanded="false" />
-            <element signature="e#2794#2806#0" expanded="true" />
-            <element signature="e#2785#3373#0" expanded="false" />
-            <element signature="e#3384#3396#0" expanded="true" />
-            <element signature="e#3375#3772#0" expanded="false" />
-            <element signature="e#3783#3795#0" expanded="true" />
-            <element signature="e#3774#4261#0" expanded="false" />
-            <element signature="e#4272#4284#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/MinGW/lib/gcc/mingw32/5.3.0/include/c++/bits/stl_algo.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -817,15 +808,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="22" selection-start-line="0" selection-start-column="22" selection-end-line="0" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BMPstructure.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -850,16 +832,46 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="250">
           <caret line="197" column="27" selection-start-line="197" selection-start-column="27" selection-end-line="197" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BMPstructure.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BMPImageLoader.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="799">
+          <caret line="121" column="0" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
+          <folding>
+            <element signature="e#136#155#0" expanded="true" />
+            <element signature="e#440#452#0" expanded="true" />
+            <element signature="e#682#694#0" expanded="true" />
+            <element signature="e#673#2783#0" expanded="false" />
+            <element signature="e#2794#2806#0" expanded="true" />
+            <element signature="e#2785#3373#0" expanded="false" />
+            <element signature="e#3384#3396#0" expanded="true" />
+            <element signature="e#3375#3772#0" expanded="false" />
+            <element signature="e#3783#3795#0" expanded="true" />
+            <element signature="e#3774#4261#0" expanded="false" />
+            <element signature="e#4272#4284#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-172">
-          <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+        <state relative-caret-position="13">
+          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#242#254#0" expanded="true" />
+            <element signature="e#316#328#0" expanded="true" />
+            <element signature="e#1111#1123#0" expanded="true" />
           </folding>
         </state>
       </provider>
