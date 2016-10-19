@@ -24,7 +24,7 @@ _______________________
 ------------------------
  */
 template <typename T>
-vector<T> sample(uint32_t size, int32_t minCap, int32_t maxCap){
+vector<T> randomVectorGenerator(uint32_t size, int32_t minCap, int32_t maxCap){
     /*Retorna un vector con datos aleatorios*/
     vector<T> randomVector;
     int32_t range = maxCap-minCap;
@@ -32,34 +32,6 @@ vector<T> sample(uint32_t size, int32_t minCap, int32_t maxCap){
         randomVector.push_back(((T)(rand()%range + minCap))/100);//Asi lo toma como un float
     }
     return move(randomVector);
-}
-
-//For training
-void foo(vector<float>& result, const vector<int> other, const float dx){
-    /*Coje un vector y le suma o resta una cantidad a cada elemento comparandolo con otro vector
-     * El tamano de los dos vectores tiene que ser igual*/
-    if(result.size() != other.size()) return;
-    for (int i = 0; i < result.size(); ++i) {
-        if(result[i] < other[i]){
-            result[i] = result[i] + dx;
-        }
-        else if(result[i] > other[i]){
-            result[i] -= dx;
-        }
-    }
-}
-/*
- * para todos los archivos de entrenamiento do -> foo(result)
- */
-
-template <typename T>
-char neuralNet(vector<T> data, string corpus){
-    /* Recive un vectori, lo analiza y retorna a que letra o numero se parece mas */
-}
-
-void qu(string pathOfFolder){
-    /*Takes the path of the folder with the training data and trains the net*/
-
 }
 
 string easyPathOfFolder(const string folderPath, const int fileNumeration, const string prefix, const string postfix){
@@ -76,6 +48,7 @@ string easyPathOfFolder(const string folderPath, const int fileNumeration, const
 }
 
 int main1() {
+    //srand tiene que ser llamado en el main!!!!!!!!
     std::srand((unsigned int)std::time(NULL));//RANDOM!!!!!
     BMPImage<int> test;
     test.read("C:\\Users\\Guaberx\\Desktop\\HandWriteRecognition\\Corpus\\Images\\0_Training\\_01.bmp");
@@ -86,6 +59,10 @@ int main1() {
     test.printNormalized();
 
     for_each(a.begin(),a.end(),[](int i){cout << "<"<<i <<"> ";});
+
+    Matrix<float> f(5,5);
+    f.fillRandom(0,1);
+    f.printMatrix();
 
     return 0;
     /*

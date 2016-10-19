@@ -1,5 +1,7 @@
 #pragma once
 #include "Node.h"
+#include <time.h>
+#include <random>
 #define TEMPLATE(x) template <typename x>
 TEMPLATE(T)
 class Matrix
@@ -45,6 +47,9 @@ public:
 	T cellInfo(int Row, int Col);//Returns the element in the cell
 
 	void printMatrix();
+
+    //Others
+    void fillRandom(int32_t minCap, int32_t maxCap);//Llena con valores aleatorios la matriz
 
     //T &operator[](uint32_t i){}
 
@@ -410,5 +415,14 @@ void Matrix<T>::printMatrix(){
             std::cout << cellInfo(i,j) << " ";
         }
         std::cout << std::endl;
+    }
+}
+TEMPLATE(T)
+void Matrix<T>::fillRandom(int32_t minCap, int32_t maxCap){
+    int32_t range = (maxCap*100)-minCap;
+    for (int i = 0; i < RowSize(); ++i) {
+        for (int j = 0; j < ColSize(); ++j) {
+            modifyCell(i,j,(T)(rand()%range + minCap)/100);
+        }
     }
 }

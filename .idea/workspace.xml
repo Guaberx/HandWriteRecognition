@@ -41,16 +41,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="85" column="27" selection-start-line="85" selection-start-column="27" selection-end-line="85" selection-end-column="27" />
+            <state relative-caret-position="387">
+              <caret line="64" column="20" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
                 <element signature="e#260#272#0" expanded="true" />
                 <element signature="e#581#593#0" expanded="true" />
-                <element signature="e#1525#1537#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Matrix.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Graph/Matrix/Matrix.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="438">
+              <caret line="424" column="59" selection-start-line="424" selection-start-column="59" selection-end-line="424" selection-end-column="59" />
+              <folding>
+                <element signature="e#13#30#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -90,10 +101,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BMPImageLoader.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BMPImageLoader.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BMPImageLoader.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
+            <state relative-caret-position="956">
               <caret line="157" column="63" selection-start-line="157" selection-start-column="63" selection-end-line="157" selection-end-column="63" />
               <folding>
                 <element signature="e#136#155#0" expanded="true" />
@@ -120,8 +131,9 @@
         <option value="$PROJECT_DIR$/Graph/Graph.h" />
         <option value="$PROJECT_DIR$/BMPstructure.h" />
         <option value="$PROJECT_DIR$/Neural Net.h" />
-        <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/BMPImageLoader.h" />
+        <option value="$PROJECT_DIR$/Graph/Matrix/Matrix.h" />
+        <option value="$PROJECT_DIR$/main.cpp" />
       </list>
     </option>
   </component>
@@ -177,6 +189,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="HandWriteRecognition" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HandWriteRecognition" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HandWriteRecognition" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Graph" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HandWriteRecognition" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="HandWriteRecognition" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Graph" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Matrix" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -391,7 +435,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="119165000" />
+    <option name="totallyTimeSpent" value="120791000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="0" width="1378" height="735" extended-state="0" />
@@ -487,7 +531,6 @@
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#260#272#0" expanded="true" />
             <element signature="e#581#593#0" expanded="true" />
-            <element signature="e#1525#1537#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -524,7 +567,6 @@
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#260#272#0" expanded="true" />
             <element signature="e#581#593#0" expanded="true" />
-            <element signature="e#1525#1537#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -561,7 +603,6 @@
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#260#272#0" expanded="true" />
             <element signature="e#581#593#0" expanded="true" />
-            <element signature="e#1525#1537#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -598,7 +639,6 @@
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#260#272#0" expanded="true" />
             <element signature="e#581#593#0" expanded="true" />
-            <element signature="e#1525#1537#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -635,7 +675,6 @@
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#260#272#0" expanded="true" />
             <element signature="e#581#593#0" expanded="true" />
-            <element signature="e#1525#1537#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -672,7 +711,6 @@
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#260#272#0" expanded="true" />
             <element signature="e#581#593#0" expanded="true" />
-            <element signature="e#1525#1537#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -709,7 +747,6 @@
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#260#272#0" expanded="true" />
             <element signature="e#581#593#0" expanded="true" />
-            <element signature="e#1525#1537#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -764,14 +801,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/GraphTallerObjetos/Graph.h" />
-    <entry file="file://$PROJECT_DIR$/Graph/Matrix/Matrix.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Graph/MACROS.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-255">
@@ -835,16 +864,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Neural Net.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="31" column="33" selection-start-line="31" selection-start-column="33" selection-end-line="31" selection-end-column="33" />
-          <folding>
-            <element signature="e#129#146#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Graph/Graph.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
@@ -863,22 +882,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="85" column="27" selection-start-line="85" selection-start-column="27" selection-end-line="85" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-            <element signature="e#260#272#0" expanded="true" />
-            <element signature="e#581#593#0" expanded="true" />
-            <element signature="e#1525#1537#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BMPImageLoader.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
+        <state relative-caret-position="956">
           <caret line="157" column="63" selection-start-line="157" selection-start-column="63" selection-end-line="157" selection-end-column="63" />
           <folding>
             <element signature="e#136#155#0" expanded="true" />
@@ -889,6 +895,38 @@
             <element signature="e#5176#5188#0" expanded="true" />
             <element signature="e#5581#5593#0" expanded="true" />
             <element signature="e#6076#6088#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Neural Net.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="31" column="33" selection-start-line="31" selection-start-column="33" selection-end-line="31" selection-end-column="33" />
+          <folding>
+            <element signature="e#129#146#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Graph/Matrix/Matrix.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="438">
+          <caret line="424" column="59" selection-start-line="424" selection-start-column="59" selection-end-line="424" selection-end-column="59" />
+          <folding>
+            <element signature="e#13#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="64" column="20" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#260#272#0" expanded="true" />
+            <element signature="e#581#593#0" expanded="true" />
           </folding>
         </state>
       </provider>
