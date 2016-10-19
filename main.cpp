@@ -58,10 +58,10 @@ int main1() {
     vector<int> a = test.patron();
     test.printNormalized();
 
-    for_each(a.begin(),a.end(),[](int i){cout << "<"<<i <<"> ";});
+    for_each(a.begin(),a.end(),[](int i){cout << "<"<<i <<"> ";}); cout << endl << endl;
 
     Matrix<float> f(5,5);
-    f.fillRandom(0,1);
+    f.fillRandom(0,1,3);//El ultimo parametro es cuantos decimales tiene
     f.printMatrix();
 
     return 0;
