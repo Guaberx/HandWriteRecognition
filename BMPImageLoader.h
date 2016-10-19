@@ -26,11 +26,13 @@ template <typename T>
 class BMPImage{
     ReadBMP bmpData;
     vector<T> bmpNormalizedData;
+    vector<uint32_t> patronData;
 public:
     void read(string imagePath);
     void normalize();
-    void print();
-    void printNormalized();
+    vector<T> patron();
+    void print() const;
+    void printNormalized() const;
 
     vector<T>& getNormalizedData();
 };
@@ -45,6 +47,8 @@ void BMPImage<T>::read(string imagePath){
         cout << "DIDNT OPEN" <<endl;
         exit(1);
     }
+    //Limpiamos los vectores
+    bmpData.image.clear();
 
     file.read((char*)&bmpData.bfh,sizeof(BITMAPFILEHEADER));
     file.read((char*)&bmpData.bih,sizeof(BITMAPINFOHEADER));
@@ -65,7 +69,7 @@ void BMPImage<T>::read(string imagePath){
     //We read an RGBTRIPLET EACH 3 BYTES OF THE FILE
     //IT's to be read byte by byte so the padding works as expected
     unsigned char buffer[bmpData.bih.biWidth * bmpData.bih.biHeight * 3];
-    cout << "PADDING:\t" << padding << endl;
+    //cout << "PADDING:\t" << padding << endl;
     for (int j = 0; j < bmpData.bih.biWidth * bmpData.bih.biHeight * 3; ++j) {
         if(padding != 0){
             if(j%(3*bmpData.bih.biWidth) == 0 && j != 0){//Checks for the padding
@@ -107,7 +111,61 @@ void BMPImage<T>::normalize() {
 }
 
 template <typename T>
-void BMPImage<T>::print(){
+vector<T> BMPImage<T>::patron(){
+    //Vamos a ha 1 linea por pixel. en este caso 25
+    vector<T> result;
+    LONG width = bmpData.bih.biWidth;
+    LONG height = bmpData.bih.biHeight;
+    LONG count = 0;
+    //Lineas horizontales
+    for (int i = 0; i < height; ++i) {
+        count = 0;
+        //Vemos en cada fila cuantas veces hay pixeles negros
+        for (int j = 0; j < width; ++j) {
+            //En el caso que haya un pixel pintado cuenta
+            if(bmpNormalizedData[i*width + j]){
+                count++;
+            }
+        }
+        result.push_back(count);
+    }
+    //Lineas verticales
+    for (int i = 0; i < width; ++i) {
+        count = 0;
+        //Vemos en cada columna cuantas veces hay pixeles negros
+        for (int j = 0; j < height; ++j) {
+            //En el caso que haya un pixel pintado cuenta
+            if(bmpNormalizedData[i + j*width]){
+                count++;
+            }
+        }
+        result.push_back(count);
+    }
+    //Cortes Diagonales
+    //Solo ve diagonales si la imagen es cuadrada
+    if(width == height){
+        //Diagonal 1 \
+        count = 0;
+        for (int k = 0; k < width; ++k) {
+            if(bmpNormalizedData[k*width + k]){
+                count++;
+            }
+        }
+        result.push_back(count);
+        //Diagonal 2 /
+        count = 0;
+        for (int k = 0; k < width; ++k) {
+            if(bmpNormalizedData[(width-k)*width + (width-k)]){
+                count++;
+            }
+        }
+        result.push_back(count);
+    }else {cout << "Las dimensiones de la imagen ingresada no son cuadradas" << endl; exit(88);}
+    return std::move(result);
+}
+
+template <typename T>
+void BMPImage<T>::print() const{
     uint32_t counter = 0;
     for_each(bmpData.image.begin(),bmpData.image.end(),
              [this,&counter](RGBTRIPLE i){
@@ -119,7 +177,7 @@ void BMPImage<T>::print(){
 }
 
 template <typename T>
-void BMPImage<T>::printNormalized(){
+void BMPImage<T>::printNormalized() const{
     uint32_t counter = 0;
     for_each(bmpNormalizedData.begin(),bmpNormalizedData.end(),
              [this,&counter](T i){

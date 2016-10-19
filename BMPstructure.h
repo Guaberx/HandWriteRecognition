@@ -4,7 +4,6 @@
 
 #ifndef HANDWRITERECOGNITION_BMPSTRUCTURE_H
 #define HANDWRITERECOGNITION_BMPSTRUCTURE_H
-
 #include <vector>
 using std::vector;
 
