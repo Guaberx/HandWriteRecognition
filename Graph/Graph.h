@@ -1,308 +1,159 @@
 //
-// Created by Guaberx on 9/24/2016.
+// Created by Guaberx on 10/21/2016.
 //
 
-#ifndef GRAPHTALLEROBJETOS_GRAPH_H
-#define GRAPHTALLEROBJETOS_GRAPH_H
-//CLOSED representa un arreglo de bits lleno de unos
-#define CLOSED (uint32_t)~0
+#ifndef GRAPH_GRAPH_H
+#define GRAPH_GRAPH_H
+#define CLOSED (~0)
 
-#include <fstream>
-#include <string>
+#include <iostream>
 #include <vector>
-#include "Matrix/Matrix.h"
-
-using std::cout;
-using std::endl;
+#include <string>
+#include <algorithm>
+#include <fstream>
 using std::vector;
 using std::string;
-using std::ifstream;
+using std::cout;
+using std::endl;
+using std::for_each;
 using std::ofstream;
+using std::ifstream;
 using std::ios;
-
-struct GraphHeader{
-    //FileSize
-    uint32_t size;
-    //dataType dice cuantos bytes ocupa el tipo de dato usado en el grafo
-    uint32_t dataType;//TODO Enhance!!!!
-    //vectorSize es la cardinalidad del conjunto de vertices; que es la raiz cuadrada de la cardinalidad de los arcos
-    uint32_t vectorSize;
-    //offset indica en que byte comienzan los datos
-    uint8_t offset;
-    //Sabemos que contiene un vector y una matriz que ocupan (_size + _size*_size)
-    //Los datos vienen organizados primero por los vertices y luego cada arco Aij de la matriz de adyacencia
-};
-
-//Las filas de la matriz representan el nodo de salida
-//Las columnas el nodo de llegada
-//El grafo contiene un vector con los nodos y una matriz de adyacencia
-template <typename T>//TODO Se puede anadir otro parametro para reemplazar las medidas de la matriz de adyacencia
+template <typename T, typename G>
 class Graph{
-private:
-    Matrix<float> adjacencyMatrix;
-    vector<T> data;//Lo que contiene cada vertice del grafo
-    uint32_t _size;
-
-    void AdjacendyMatrixUpdate();
 public:
-    //Constructoras_____________________
-    Graph();
-    //Crea un grafo de tamano numVertices. datosGrafo trae la informacion de cada vertice
-    // y arcos es una matriz donde en arcos[i][j] esta el costo del vertice v1 y el vertice vj
-    Graph(vector<T> datosGrafo, float **arcos, uint32_t numVertices);
-    //Modificadoras_____________________
-    void insVertice(T dato);//Anexa un vertice con la informacion dato
-    void setVertice(uint32_t i, T dato);//Cambia la informacion del vertice Vi, por dato
-    void setArco(uint32_t i, uint32_t j, int32_t costo);//Arco entre Vi y Vj
-    void elimArco(uint32_t i, uint32_t j);//Elimina el arco
-    Graph<T> copy(Graph<T>&& fuente);
+    Graph(){}
+    Graph(vector<T> newData):data(newData){}
 
-    //Analizadoras (Operaciones	get)
-    float costoArco(uint32_t i, uint32_t j);//retorna el costo entre el vértice vi y el vértice vj. Si no hay arco retorna -1.
+    void insVertix(T newElem);//Agrega un elemento a data y en la matriz se inicializa sin conexiones
+    void setVertix(uint32_t i,T newElem);//se describe sola
+    void setArco(uint32_t i,uint32_t j,G newArco);//i,j de matrix
+    void elimArco(uint32_t i,uint32_t j);//Lo cierra
+    G costoArco(uint32_t i,uint32_t j);
 
-    T infoVertice(uint32_t i);
-    uint32_t size();
     vector<uint32_t> predecesores(uint32_t i);//retorna los predecesores del vértice vi
     vector<uint32_t> sucesores(uint32_t i);//retorna la lista de sucesores del vertice vi
-    void print();
 
     //Persistencia
     void clean();
 
-    void load(string filePath);
     void save(string filePath);
+    void load(string filePath);
 
+    void printData(){for_each(data.begin(),data.end(),[](T i){
+            cout << "<" << i << ">";});
+        cout << endl;
+    }
+    void printMatrix(){for_each(matrix.begin(),matrix.end(),[](vector<G> i){
+            for_each(i.begin(),i.end(),[](T j){
+                cout << j << " ";
+            });
+            cout << endl;
+        });
+    }
     //Destructora
-    ~Graph();//Devuelve al sistema toda la memoria dinamica utilizada
-
-    //Sobrecarga de operadores
-    Graph<T> &operator = (Graph<T> &other){
-        data = other.data;
-        adjacencyMatrix = other.adjacencyMatrix;
-        _size = other._size;
-        return *this;
-    }
-    Graph<T> operator = (Graph<T> &&other){
-        //TODO TERMINAR
-        auto tempSize = _size;
-        auto tempData = data;
-        data = other.data;
-        _size = other._size;
-        other.data = tempData;
-        other._size = tempSize;
-        return *this;
-    }
-    friend std::ostream &operator <<(std::ostream &output, Graph<T> &OU){
-        for (int i = 0; i < OU.size(); ++i) {
-            output << OU.data[i];
-            for (int j = 0; j < OU.size(); ++j) {
-                if(OU.adjacencyMatrix.cellInfo(i,j) != CLOSED)
-                    output << " -> " << OU.data[i];
-            }
-            output << std::endl;
-        }
-        return output;
-    }
-    T &operator [](uint32_t i){
-        return data[i];
-    }
-    /*
-     * copiarGrafo utilizando operator=
-     * imprimirGrafo utilizando operator<<
-     * infoVertice utilizando operator[]
-     */
-
-    //Punto 3
-    /*
-     * defina un grafo de tipo float (Grafo<float>) y calcule la suma de
-     * producto de los predecesores (importante para el proyecto).
-     * prodPredecesores(Vi) se calcula así: Para un nodo vi, extraiga
-     * la lista de sus predecesores (predecesores(i)). Multiplique el
-     * valor del nodo predecesor por el costo del arco de dicho nodo
-     * al nodo Vi. Acumule todos los resultados parciales.
-     */
+    ~Graph(){clean();}//Devuelve al sistema toda la memoria dinamica utilizada
+private:
+    vector<T> data;
+    vector<vector<G>> matrix;
 };
-//Provate
-template <typename T>
-void Graph<T>::AdjacendyMatrixUpdate() {
-    //Cierra todos los campos
-    for (int i = 0; i < _size; ++i) {
-        for (int j = 0; j < _size; ++j) {
-            if(i != j){
-                adjacencyMatrix.modifyCell(i,j,CLOSED);
-            }
-        }
-    }
-}
 
 
-//Public
-template <typename T>
-Graph<T>::Graph():_size(0){
-    //Tanto vector como Matrix tienen su propio constructor, por lo que no se necesita implementar esta
-    std::cout << "Grafo vacio creado" << std::endl;
-    AdjacendyMatrixUpdate();
-}
-//Arcos tiene que ser una matriz cuadrada
-template <typename T>
-Graph<T>::Graph(vector<T> datosGrafo, float **arcos, uint32_t numVertices):data(datosGrafo),_size(numVertices){
-    //|i|==numVertices && |j|==numVertices o hay SGV
-    adjacencyMatrix.addRowCol(numVertices);
-    //Llenamos la matriz con todos los nodos cerrados, exepto las diagonales
-    AdjacendyMatrixUpdate();
-    //Llenamos la matriz de adyacencia con la informacion proporcionada
-    for (int i = 0; i < numVertices; ++i) {
-        for (int j = 0; j < numVertices; ++j) {
-            adjacencyMatrix.modifyCell(i,j,arcos[i][j]);//TODO Si hay SGV es aqui!!!!!!!!!!!!!!!!!!!!!!
-        }
+template <typename T, typename G>
+void Graph<T,G>::insVertix(T newElem){
+    data.push_back(newElem);
+    vector<G> tempVector;
+    for (int i = 0; i < matrix.size(); ++i) {
+        tempVector.push_back(CLOSED);
     }
-    std::cout << "Grafo de " << numVertices <<" vertices creado" << std::endl;
-}
-template <typename T>
-void Graph<T>::insVertice(T dato) {
-    //Como inserta un vertice, tambien toca modificar la matriz de adyacencia
-    data.push_back(dato);
-    adjacencyMatrix.addRowCol();
-    _size++;
-}
-template <typename T>
-void Graph<T>::setVertice(uint32_t i, T dato) {
-    if(i > data.size()){
-        std::cout << "Numero instroducido en funcion setVertice(int i, T dato) de i fuera del rango" <<std::endl;
-        return;
+    matrix.push_back(tempVector);
+    for (int j = 0; j < matrix.size(); ++j) {
+        matrix[j].push_back(CLOSED);
     }
-    data.at(data.begin() + i) = dato;
-}
-template <typename T>
-void Graph<T>::setArco(uint32_t i, uint32_t j, int32_t costo) {
-    if(i>=_size || j>=_size)
-        cout << "En la funcion setArco: i o j no apunta/n a un elemento entre los datos" << endl;
-    else
-        adjacencyMatrix.modifyCell(i,j,costo);
-}
-template <typename T>
-void Graph<T>::elimArco(uint32_t i, uint32_t j) {
-    //TODO supongo que se refiere a cerrar la ruta, pero no quitar el nodo. por lo que se le asigna infinito
-    adjacencyMatrix.modifyCell(i,j,CLOSED);
-}
-template <typename T>
-Graph<T> Graph<T>::copy(Graph<T>&& fuente) {
-    data = fuente.data;
-    adjacencyMatrix = fuente.adjacencyMatrix;
-    return fuente;
-}
-template <typename T>
-float Graph<T>::costoArco(uint32_t i, uint32_t j) {
-    return adjacencyMatrix.cellInfo(i,j);
-}
-template <typename T>
-T Graph<T>::infoVertice(uint32_t i) {
-    return data[i];
-}
-template <typename T>
-uint32_t Graph<T>::size() {
-    return _size;
-}
-template <typename T>
-vector<uint32_t> Graph<T>::predecesores(uint32_t i) {
-    //Muestra todos los predecesores de Vi
-    //TODO poner atencion al valor de condicion CLOSED al crear la matriz
-    vector<uint32_t> predecessors;
-    for (int j = 0; j < _size; ++j) {
-        if(adjacencyMatrix.cellInfo(i,j) != CLOSED){
-            predecessors.push_back(j);
-        }
+};
+
+template <typename T, typename G>
+void Graph<T,G>::setVertix(uint32_t i,T newElem){data[i] = newElem;};
+
+template <typename T, typename G>
+void Graph<T,G>::setArco(uint32_t i,uint32_t j,G newArco){matrix[i][j] = newArco;};
+
+template <typename T, typename G>
+void Graph<T,G>::elimArco(uint32_t i,uint32_t j){ matrix[i][j] = CLOSED;};
+
+template <typename T, typename G>
+G Graph<T,G>::costoArco(uint32_t i,uint32_t j){ return matrix[i][j];};
+
+template <typename T, typename G>
+vector<uint32_t> Graph<T,G>::predecesores(uint32_t i){
+    vector<uint32_t> result;
+    for (int j = 0; j < matrix.size(); ++j) {
+        if(matrix[j][i] != CLOSED)
+            result.push_back(matrix[j][i]);
     }
-    return predecessors;
-}
-template <typename T>
-vector<uint32_t> Graph<T>::sucesores(uint32_t i) {
-    //Muestra todos los sucesores de Vi
-    //TODO poner atencion al valor de condicion CLOSED al crear la matriz
-    vector<uint32_t> sucessors;
-    for (int j = 0; j < _size; ++j) {
-        if(adjacencyMatrix.cellInfo(j,i) != CLOSED){
-            sucessors.push_back(j);
-        }
+    return result;
+};
+
+template <typename T, typename G>
+vector<uint32_t> Graph<T,G>::sucesores(uint32_t i){
+    vector<uint32_t> result;
+    for (int j = 0; j < matrix.size(); ++j) {
+        if(matrix[i][j] != CLOSED)
+            result.push_back(matrix[i][j]);
     }
-    return sucessors;
-}
-template <typename T>
-void Graph<T>::print() {
-    for (int i = 0; i < _size; ++i) {
-        std::cout << data[i];
-        for (int j = 0; j < _size; ++j) {
-            if(adjacencyMatrix.cellInfo(i,j) != CLOSED)
-                std::cout << " -> " << data[j];
-        }
-        std::cout << std::endl;
-    }
-}
-template <typename T>
-void Graph<T>::clean(){
-    data.clear();
-    adjacencyMatrix.clean();
-    _size = 0;
-}
-template <typename T>
-void Graph<T>::load(string filePath) {
-    //First we clean the Graph
-    clean();
-    //Open File
-    ifstream file(filePath, ios::in | ifstream::binary);
-    //Read the data into the struct
-    GraphHeader tempGraphHeader;
-    file.read((char*)&tempGraphHeader,sizeof(GraphHeader));
-    //Set the reading pointer to the offset
-    //file.seekg((uint32_t)tempGraphHeader.offset,file.beg);//TODO REVISAR SI SALE MAL ALGO: PROBLEMA AQUI
-    //We fill the vector<T> data
-    T tempData;
-    for (int i = 0; i < tempGraphHeader.vectorSize; ++i) {
-        file.read((char*)&tempData,sizeof(T));
-        data.push_back(tempData);
-    }
-    _size = data.size();
-    //Then we create a temporal Matrix and then copy it to the Graph adjacency matrix
-    adjacencyMatrix.addRowCol(tempGraphHeader.vectorSize);//Define adjacencyMatrix Size
-    float tempFloat;
-    for (int i = 0; i < tempGraphHeader.vectorSize; ++i) {
-        for (int j = 0; j < tempGraphHeader.vectorSize; ++j) {
-            file.read((char*)&tempFloat,(tempGraphHeader.vectorSize*tempGraphHeader.vectorSize));
-            adjacencyMatrix.modifyCell(i,j,tempFloat);
-        }
-    }
-}
-//Ambas formas funcionan, pero me demore mucho haciendo la segunda asi que es la que voy a mostrar :')
-template <typename T>
-void Graph<T>::save(string filePath) {
+    return result;
+};
+
+//Persistencia
+template <typename T, typename G>
+void Graph<T,G>::clean(){data.clear(); for_each(matrix.begin(),matrix.end(),[](vector<G> i){ i.clear();}); matrix.clear();};
+
+template <typename T, typename G>
+void Graph<T,G>::save(string filePath){
     ofstream file(filePath, ios::out | ofstream::binary);
-
-    GraphHeader tempHeader;
-    tempHeader.vectorSize = _size;
-    tempHeader.dataType = sizeof(T);
-    tempHeader.size = sizeof(GraphHeader)+(sizeof(T)*_size)+sizeof(T)*(_size*_size);;
-    uint8_t offset = sizeof(GraphHeader);//TODO!!!!!!!!!!!
-    //Writes the header
-    file.write((char*)&tempHeader,sizeof(GraphHeader));
+    //Header Of Data Size
+    uint32_t dataSize = data.size();
+    file.write((char*)&dataSize,sizeof(uint32_t));
+    //Header Of Matrix Size
+    uint32_t matrixSize = matrix.size();
+    file.write((char*)&matrixSize,sizeof(uint32_t));
     //Writes the data
-    for (int i = 0; i < _size; ++i) {
+    for (int i = 0; i < data.size(); ++i) {
         file.write((char*)&data[i],sizeof(T));
     }
     //Writes the matrix
     float tempFloat;
-    for (int i = 0; i < _size; ++i) {
-        for (int j = 0; j < _size; ++j) {
-            tempFloat = adjacencyMatrix.cellInfo(i,j);
-            file.write((char*)&tempFloat,sizeof(float));
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix[i].size(); ++j) {
+            file.write((char*)&tempFloat,sizeof(G));
         }
     }
 }
 
-template <typename T>
-Graph<T>::~Graph() {
-    //No se utiliza memoria dinamica
+template <typename T, typename G>
+void Graph<T,G>::load(string filePath){
     clean();
-    std::cout << "Grafo destruido" << std::endl;
+    ifstream file(filePath, ios::in | ifstream::binary);
+    uint32_t dataSize = data.size();
+    uint32_t matrixSize = matrix.size();
+    file.read((char*)&dataSize,sizeof(uint32_t));
+    file.read((char*)&matrixSize,sizeof(uint32_t));
+
+    T tempDataElem;
+    for (int i = 0; i < dataSize; ++i) {
+        file.read((char*)&tempDataElem,sizeof(T));
+        data.push_back(tempDataElem);
+    }
+    G tempMatrixElem;
+    vector<G> tempVector;
+    for (int j = 0; j < matrixSize; ++j) {
+        matrix.push_back(tempVector);
+        for (int i = 0; i < matrixSize; ++i) {
+            file.read((char*)&tempMatrixElem,sizeof(G));
+            matrix[j].push_back(tempMatrixElem);
+        }
+    }
 }
 
-#endif //GRAPHTALLEROBJETOS_GRAPH_H
+
+#endif //GRAPH_GRAPH_H
