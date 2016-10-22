@@ -1,6 +1,6 @@
 #include "MACROS.h"
 #include "BMPImageLoader.h"
-#include "Graph/Graph.h"
+#include "Neural Net.h"
 #include <random>
 #include <ctime>
 #include <sstream>
@@ -50,7 +50,7 @@ string easyPathOfFolder(const string folderPath, const int fileNumeration, const
 int main1() {
     //srand tiene que ser llamado en el main!!!!!!!!
     std::srand((unsigned int)std::time(NULL));//RANDOM!!!!!
-    BMPImage<int> test;
+    /*BMPImage<int> test;
     test.read("C:\\Users\\Guaberx\\Desktop\\HandWriteRecognition\\Corpus\\Images\\0_Training\\_01.bmp");
     test.normalize();
     test.patron();
@@ -59,17 +59,18 @@ int main1() {
     test.printNormalized();
 
     for_each(a.begin(),a.end(),[](int i){cout << "<"<<i <<"> ";}); cout << endl << endl;
+*/
 
+    vector<double> iv0 = {0,0};
+    vector<double> iv1 = {0,1};
+    vector<double> iv2 = {1,0};
+    vector<double> iv3 = {1,1};
 
-    vector<int> iv0 = {0,0};
-    vector<int> iv1 = {0,1};
-    vector<int> iv2 = {1,0};
-    vector<int> iv3 = {1,1};
+    Topology<double> top1(iv0,iv0.size(),1);
+    Net<double,int> net1(top1,1);
 
-
-    Graph<int,float> nose(iv0,2+1);
-    nose.printData();
-    nose.printMatrix();
+    net1.printNeurons();
+    net1.printConnections();
 
     return 0;
     /*

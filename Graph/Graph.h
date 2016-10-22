@@ -32,6 +32,7 @@ public:
         }
     }
     Graph(const vector<T> newData,uint32_t extraLayers):data(newData){
+        //Acomodamos la matriz
         for (int i = 0; i < newData.size(); ++i) {
             matrix.push_back(vector<G>());//La matriz es cuadrada y no hay conexiones
             for (int j = 0; j < newData.size(); ++j) {
@@ -50,7 +51,15 @@ public:
                 matrix[i].push_back(G(CLOSED));//TODO VOLVER ALEATORIO
             }
         }
+        //Acomodamos data
+        for (int l = 0; l < extraLayers; ++l) {
+            data.push_back(T());
+        }
     }
+
+    uint32_t getDataSize()const{return data.size();}
+    uint32_t getRowSize()const{return matrix.size();}
+    uint32_t getColSize()const{return matrix.empty()? 0:matrix[0].size();}
 
     void insVertix(T newElem);//Agrega un elemento a data y en la matriz se inicializa sin conexiones
     void setVertix(uint32_t i,T newElem);//se describe sola
@@ -60,20 +69,20 @@ public:
     T infoVertice(uint32_t i) const;
     G costoArco(uint32_t i,uint32_t j) const;
 
-    vector<uint32_t> predecesores(uint32_t i);//retorna los predecesores del vértice vi
-    vector<uint32_t> sucesores(uint32_t i);//retorna la lista de sucesores del vertice vi
+    vector<uint32_t> predecesores(uint32_t i)const;//retorna los predecesores del vértice vi
+    vector<uint32_t> sucesores(uint32_t i)const;//retorna la lista de sucesores del vertice vi
 
     //Persistencia
     void clean();
 
-    void save(string filePath);
+    void save(string filePath)const;
     void load(string filePath);
 
-    void printData(){for_each(data.begin(),data.end(),[](T i){
+    void printData()const{for_each(data.begin(),data.end(),[](T i){
             cout << "<" << i << ">";});
         cout << endl;
     }
-    void printMatrix(){for_each(matrix.begin(),matrix.end(),[](vector<G> i){
+    void printMatrix()const{for_each(matrix.begin(),matrix.end(),[](vector<G> i){
             for_each(i.begin(),i.end(),[](T j){
                 cout << (G)j << " ";
             });
@@ -119,7 +128,7 @@ template <typename T, typename G>
 G Graph<T,G>::costoArco(uint32_t i,uint32_t j) const{ return matrix[i][j];};
 
 template <typename T, typename G>
-vector<uint32_t> Graph<T,G>::predecesores(uint32_t i){
+vector<uint32_t> Graph<T,G>::predecesores(uint32_t i)const{
     vector<uint32_t> result;
     for (int j = 0; j < matrix.size(); ++j) {
         if(matrix[j][i] != CLOSED)
@@ -129,7 +138,7 @@ vector<uint32_t> Graph<T,G>::predecesores(uint32_t i){
 };
 
 template <typename T, typename G>
-vector<uint32_t> Graph<T,G>::sucesores(uint32_t i){
+vector<uint32_t> Graph<T,G>::sucesores(uint32_t i)const{
     vector<uint32_t> result;
     for (int j = 0; j < matrix.size(); ++j) {
         if(matrix[i][j] != CLOSED)
@@ -143,7 +152,7 @@ template <typename T, typename G>
 void Graph<T,G>::clean(){data.clear(); for_each(matrix.begin(),matrix.end(),[](vector<G> i){ i.clear();}); matrix.clear();};
 
 template <typename T, typename G>
-void Graph<T,G>::save(string filePath){
+void Graph<T,G>::save(string filePath)const{
     ofstream file(filePath, ios::out | ofstream::binary);
     //Header Of Data Size
     uint32_t dataSize = data.size();
