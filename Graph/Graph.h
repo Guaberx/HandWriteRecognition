@@ -46,7 +46,7 @@ public:
     }
     void printMatrix(){for_each(matrix.begin(),matrix.end(),[](vector<G> i){
             for_each(i.begin(),i.end(),[](T j){
-                cout << j << " ";
+                cout << (G)j << " ";
             });
             cout << endl;
         });
@@ -122,10 +122,9 @@ void Graph<T,G>::save(string filePath){
         file.write((char*)&data[i],sizeof(T));
     }
     //Writes the matrix
-    float tempFloat;
     for (int i = 0; i < matrix.size(); ++i) {
         for (int j = 0; j < matrix[i].size(); ++j) {
-            file.write((char*)&tempFloat,sizeof(G));
+            file.write((char*)&matrix[i][j],sizeof(G));
         }
     }
 }
