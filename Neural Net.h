@@ -13,10 +13,11 @@
 using std::exp;
 using std::rand;
 
+template <typename T>
 class Neuron{
 public:
     Neuron(){}
-    Neuron(double newData):data(newData){}
+    Neuron(T newData):data(newData){}
     //x es el peso por el input  + el limite
     void sigmoidEquation(int32_t x){
         data =  1/(1+exp(x));
@@ -24,10 +25,11 @@ public:
     void sigmoidDerivatedFunction(int32_t x){
         data = 1/(1+exp(1 - x));
     }
-    double getData()const{return data;}
+    void understand(vector<T> incomingData){}
+    T getData()const{return data;}
     void setData(double newData){data = newData;}
 private:
-    double data;
+    T data;
 };//Almacena la informacion y hace las operaciones para eso
 
 template <typename T>//TODO Refinar
@@ -73,7 +75,7 @@ Net<T,RESULTTYPE>::Net(Topology<T> topology, bool setRandomWeights) {
             }
         }
         //Luego las conexiones de la capa escondida con la resultante
-        for (int i = topology.getInputLayer().size(); i < topology.getInputLayer().size()+topology.getNHiddenLayers()+topology.getNResultLayers() ; ++i) {
+        for (int i = topology.getInputLayer().size(); i < topology.getInputLayer().size()+topology.getNHiddenLayers() ; ++i) {
             for (int j = topology.getInputLayer().size()+topology.getNHiddenLayers(); j < topology.getInputLayer().size()+topology.getNHiddenLayers()+topology.getNResultLayers() ; ++j) {
                 randomNumber = (rand()%1000)/1000;
                 connections.setArco(i,j,randomNumber);
