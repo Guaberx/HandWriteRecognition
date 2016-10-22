@@ -23,13 +23,42 @@ template <typename T, typename G>
 class Graph{
 public:
     Graph(){}
-    Graph(vector<T> newData):data(newData){}
+    Graph(const vector<T> newData):data(newData){
+        for (int i = 0; i < newData.size(); ++i) {
+            matrix.push_back(vector<G>());//La matriz es cuadrada y no hay conexiones
+            for (int j = 0; j < newData.size(); ++j) {
+                matrix[i].push_back(G(CLOSED));
+            }
+        }
+    }
+    Graph(const vector<T> newData,uint32_t extraLayers):data(newData){
+        for (int i = 0; i < newData.size(); ++i) {
+            matrix.push_back(vector<G>());//La matriz es cuadrada y no hay conexiones
+            for (int j = 0; j < newData.size(); ++j) {
+                matrix[i].push_back(G(CLOSED));
+            }
+        }
+        for (int k = 0; k < extraLayers; ++k) {
+            //Se agrega uno
+            matrix.push_back(vector<G>());
+            //El que se agrego toca igualarlo en tamano a las otras filas
+            for (int j = 0; j < matrix[0].size(); ++j) {//TODO REVISAR CUANTAS
+                matrix[data.size()+k].push_back(G(CLOSED));//TODO VOLVER ALEATORIO
+            }
+            //Luego se le agrega una columna a cada fila para que quede cuadrada
+            for (int i = 0; i < matrix.size(); ++i) {//TODO REVISAR CUANTAS
+                matrix[i].push_back(G(CLOSED));//TODO VOLVER ALEATORIO
+            }
+        }
+    }
 
     void insVertix(T newElem);//Agrega un elemento a data y en la matriz se inicializa sin conexiones
     void setVertix(uint32_t i,T newElem);//se describe sola
     void setArco(uint32_t i,uint32_t j,G newArco);//i,j de matrix
     void elimArco(uint32_t i,uint32_t j);//Lo cierra
-    G costoArco(uint32_t i,uint32_t j);
+
+    T infoVertice(uint32_t i) const;
+    G costoArco(uint32_t i,uint32_t j) const;
 
     vector<uint32_t> predecesores(uint32_t i);//retorna los predecesores del vértice vi
     vector<uint32_t> sucesores(uint32_t i);//retorna la lista de sucesores del vertice vi
@@ -82,7 +111,12 @@ template <typename T, typename G>
 void Graph<T,G>::elimArco(uint32_t i,uint32_t j){ matrix[i][j] = CLOSED;};
 
 template <typename T, typename G>
-G Graph<T,G>::costoArco(uint32_t i,uint32_t j){ return matrix[i][j];};
+T Graph<T,G>::infoVertice(uint32_t i) const{
+    return data[i];
+};
+
+template <typename T, typename G>
+G Graph<T,G>::costoArco(uint32_t i,uint32_t j) const{ return matrix[i][j];};
 
 template <typename T, typename G>
 vector<uint32_t> Graph<T,G>::predecesores(uint32_t i){

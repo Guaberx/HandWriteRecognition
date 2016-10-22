@@ -6,8 +6,6 @@
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/BMPstructure.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Graph/Graph.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Graph/Matrix/Node.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Graph/Matrix/Matrix.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/BMPImageLoader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Neural Net.h" isTestSource="false" />

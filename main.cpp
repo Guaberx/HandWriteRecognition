@@ -60,9 +60,16 @@ int main1() {
 
     for_each(a.begin(),a.end(),[](int i){cout << "<"<<i <<"> ";}); cout << endl << endl;
 
-    Matrix<float> f(5,5);
-    f.fillRandom(0,1,3);//El ultimo parametro es cuantos decimales tiene
-    f.printMatrix();
+
+    vector<int> iv0 = {0,0};
+    vector<int> iv1 = {0,1};
+    vector<int> iv2 = {1,0};
+    vector<int> iv3 = {1,1};
+
+
+    Graph<int,float> nose(iv0,2+1);
+    nose.printData();
+    nose.printMatrix();
 
     return 0;
     /*
