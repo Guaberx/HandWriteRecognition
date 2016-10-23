@@ -66,8 +66,10 @@ int main1() {
     vector<double> iv2 = {1,0};
     vector<double> iv3 = {1,1};
 
-    Topology<double> top1(iv0,iv0.size(),1);
-    Net<double,int> net1(top1,1);
+    Topology<double> top1(iv3,iv3.size(),1);
+    Net<double,char> net1(top1,1);
+
+    cout << endl << "POPO:\t" << net1.getSumOfPredecessors(2)<< endl;
 
     net1.printNeurons();
     net1.printConnections();

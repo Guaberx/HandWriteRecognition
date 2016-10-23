@@ -130,9 +130,9 @@ G Graph<T,G>::costoArco(uint32_t i,uint32_t j) const{ return matrix[i][j];};
 template <typename T, typename G>
 vector<uint32_t> Graph<T,G>::predecesores(uint32_t i)const{
     vector<uint32_t> result;
-    for (int j = 0; j < matrix.size(); ++j) {
+    for (uint32_t j = 0; j < matrix.size(); ++j) {
         if(matrix[j][i] != CLOSED)
-            result.push_back(matrix[j][i]);
+            result.push_back(j);
     }
     return result;
 };
@@ -140,9 +140,9 @@ vector<uint32_t> Graph<T,G>::predecesores(uint32_t i)const{
 template <typename T, typename G>
 vector<uint32_t> Graph<T,G>::sucesores(uint32_t i)const{
     vector<uint32_t> result;
-    for (int j = 0; j < matrix.size(); ++j) {
+    for (uint32_t j = 0; j < matrix.size(); ++j) {
         if(matrix[i][j] != CLOSED)
-            result.push_back(matrix[i][j]);
+            result.push_back(j);
     }
     return result;
 };

@@ -18,7 +18,7 @@ class Neuron{
 public:
     Neuron(){}
     Neuron(T newData):data(newData){}
-    //x es el peso por el input  + el limite
+    //x es la sumatoria de los pesos por su respectivo arco  + el limite
     void sigmoidEquation(int32_t x){
         data =  1/(1+exp(x));
     }
@@ -52,14 +52,17 @@ public:
     //La data del graph cambia, los pesos varian en el backpropagation, en el forward es la data
     //ResultLayers contiene lo del resultado.
     Net(Topology<T> topology, bool setRandomWeights);//TODO REVISAR
-    uint32_t getUsableDataSize()const{return connections.getDataSize();}
-    void feedForward(const vector<double> &inputVals);
+
+    T getSumOfPredecessors(uint32_t i);
+
+//    void feedForward(const vector<double> &inputVals);
     void backPropagation(const vector<double> &targetVals);
     void getResult(vector<double> &resultVals) const ;
     void printNeurons(){connections.printData();}
     void printConnections(){connections.printMatrix();}
 private:
     Graph<T,double> connections;//m_layers[layerNum][NeuronNum]
+    uint32_t dataOffset;
 };
 
 template <typename T, typename RESULTTYPE>
@@ -70,18 +73,36 @@ Net<T,RESULTTYPE>::Net(Topology<T> topology, bool setRandomWeights) {
         //Primero hacemos las conexiones de la primera capa con la escondida
         for (int i = 0; i < topology.getInputLayer().size() ; ++i) {
             for (int j = topology.getInputLayer().size(); j < topology.getInputLayer().size()+topology.getNHiddenLayers() ; ++j) {
-                randomNumber = (rand()%1000)/1000;
+                randomNumber = (double)(rand()%(int)pow(10,4) + 0)/pow(10,4);;
                 connections.setArco(i,j,randomNumber);
             }
         }
         //Luego las conexiones de la capa escondida con la resultante
         for (int i = topology.getInputLayer().size(); i < topology.getInputLayer().size()+topology.getNHiddenLayers() ; ++i) {
             for (int j = topology.getInputLayer().size()+topology.getNHiddenLayers(); j < topology.getInputLayer().size()+topology.getNHiddenLayers()+topology.getNResultLayers() ; ++j) {
-                randomNumber = (rand()%1000)/1000;
+                randomNumber = (double)(rand()%(int)pow(10,4) + 0)/pow(10,4);;
                 connections.setArco(i,j,randomNumber);
             }
         }
     }
+    dataOffset = topology.getInputLayer().size();
 }
+
+template <typename T, typename RESULTTYPE>
+T Net<T,RESULTTYPE>::getSumOfPredecessors(uint32_t i){
+    T result = 0;
+    vector<uint32_t> predecesores;
+    predecesores = connections.predecesores(i);
+    for_each(predecesores.begin(),predecesores.end(),[&result,&i,this](uint32_t k){
+        result += connections.costoArco(k,i)*connections.infoVertice(k);
+    });
+    return result;
+}/*
+template <typename T, typename RESULTTYPE>
+void Net<T,RESULTTYPE>::feedForward(const vector<T> &inputVals) {
+    for (int i = dataOffset-1; i < connections.getDataSize(); ++i) {
+        //connections.predecesores();
+    }
+}*/
 
 #endif //HANDWRITERECOGNITION_NEURAL_NET_H
