@@ -23,7 +23,7 @@ public:
         data =  1/(1+exp(x));
     }
     void sigmoidDerivatedFunction(int32_t x){
-        data = 1/(1+exp(1 - x));
+        data = (1/(1+exp(x)))*(1-(1/(1+exp(x))));
     }
     void understand(vector<T> incomingData){}
     T getData()const{return data;}
@@ -55,7 +55,7 @@ public:
 
     T SumPredArc(uint32_t i);
 
-    void feedForward(const vector<T> &inputVals);
+    vector<T> feedForward(const vector<T> &inputVals);
     void backPropagation(const vector<T> &targetVals);
     void getResult(vector<T> &resultVals) const ;
     void printNeurons(){connections.printData();}
@@ -63,6 +63,7 @@ public:
 private:
     Graph<T,double> connections;//m_layers[layerNum][NeuronNum]
     uint32_t dataOffset;
+    uint32_t dataAndHiddenOffset;
 };
 
 template <typename T, typename RESULTTYPE>
@@ -86,6 +87,7 @@ Net<T,RESULTTYPE>::Net(Topology<T> topology, bool setRandomWeights) {
         }
     }
     dataOffset = topology.getInputLayer().size();
+    dataAndHiddenOffset = dataOffset + topology.getNHiddenLayers();
 }
 
 template <typename T, typename RESULTTYPE>
@@ -100,20 +102,26 @@ T Net<T,RESULTTYPE>::SumPredArc(uint32_t i){
 }
 
 template <typename T, typename RESULTTYPE>
-void Net<T,RESULTTYPE>::feedForward(const vector<T> &inputVals) {
+vector<T> Net<T,RESULTTYPE>::feedForward(const vector<T> &inputVals) {
     //Bad parameter checking
     if(inputVals.size() != dataOffset){
         cout << "El vector proporcionado no corresponde en tamano a la primera capa de la red" << endl;
-        return;
+        return vector<T>();//TODO SHOULD THE PROGRAM END HERE??
     }
     //Primero reemplazamos el nuevo vector dentro  de connections
-    for (int j = 0; j < dataOffset; ++j) {
+    for (uint32_t j = 0; j < dataOffset; ++j) {
         connections.setVertix(j,inputVals[j]);
     }
     //Hacemos las operaciones para la capa oculta
-    for (int i = dataOffset; i < connections.getDataSize(); ++i) {
-        connections.setVertix(i,1/(1+exp(SumPredArc(i))));
+    for (uint32_t i = dataOffset; i < connections.getDataSize(); ++i) {
+        connections.setVertix(i,1/(1+exp(-SumPredArc(i))));//TODO VOLVER UNA FUNCION APARTE SIGMOID
     }
+    //Llenamos el vector resultado para retornar
+    vector<T> result;//TODO CHECK EL CICLO
+    for (int k = dataAndHiddenOffset; k < connections.getRowSize(); ++k) {
+        result.push_back(connections.getData(k));
+    }
+    return result;
 }
 
 template <typename T, typename RESULTTYPE>

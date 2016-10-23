@@ -70,10 +70,12 @@ int main1() {
     Topology<double> top1(iv3,iv3.size(),1);
     Net<double,bool> net1(top1,1);
 
-    net1.feedForward(iv3);
+    vector<double> pri = net1.feedForward(iv3);
 
     net1.printNeurons();
     net1.printConnections();
+    cout << endl << endl;
+    for_each(pri.begin(),pri.end(),[](double i){cout << i <<", ";});cout << endl;
 
     return 0;
     /*
