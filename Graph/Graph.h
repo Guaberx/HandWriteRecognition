@@ -22,6 +22,7 @@ using std::ios;
 template <typename T, typename G>
 class Graph{
 public:
+    T getData(uint32_t i)const{return data[i];}
     Graph(){}
     Graph(const vector<T> newData):data(newData){
         for (int i = 0; i < newData.size(); ++i) {

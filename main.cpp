@@ -50,6 +50,7 @@ string easyPathOfFolder(const string folderPath, const int fileNumeration, const
 int main1() {
     //srand tiene que ser llamado en el main!!!!!!!!
     std::srand((unsigned int)std::time(NULL));//RANDOM!!!!!
+    rand();
     /*BMPImage<int> test;
     test.read("C:\\Users\\Guaberx\\Desktop\\HandWriteRecognition\\Corpus\\Images\\0_Training\\_01.bmp");
     test.normalize();
@@ -67,9 +68,9 @@ int main1() {
     vector<double> iv3 = {1,1};
 
     Topology<double> top1(iv3,iv3.size(),1);
-    Net<double,char> net1(top1,1);
+    Net<double,bool> net1(top1,1);
 
-    cout << endl << "POPO:\t" << net1.getSumOfPredecessors(2)<< endl;
+    net1.feedForward(iv3);
 
     net1.printNeurons();
     net1.printConnections();

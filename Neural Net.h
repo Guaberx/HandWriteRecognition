@@ -53,11 +53,11 @@ public:
     //ResultLayers contiene lo del resultado.
     Net(Topology<T> topology, bool setRandomWeights);//TODO REVISAR
 
-    T getSumOfPredecessors(uint32_t i);
+    T SumPredArc(uint32_t i);
 
-//    void feedForward(const vector<double> &inputVals);
-    void backPropagation(const vector<double> &targetVals);
-    void getResult(vector<double> &resultVals) const ;
+    void feedForward(const vector<T> &inputVals);
+    void backPropagation(const vector<T> &targetVals);
+    void getResult(vector<T> &resultVals) const ;
     void printNeurons(){connections.printData();}
     void printConnections(){connections.printMatrix();}
 private:
@@ -89,7 +89,7 @@ Net<T,RESULTTYPE>::Net(Topology<T> topology, bool setRandomWeights) {
 }
 
 template <typename T, typename RESULTTYPE>
-T Net<T,RESULTTYPE>::getSumOfPredecessors(uint32_t i){
+T Net<T,RESULTTYPE>::SumPredArc(uint32_t i){
     T result = 0;
     vector<uint32_t> predecesores;
     predecesores = connections.predecesores(i);
@@ -97,12 +97,28 @@ T Net<T,RESULTTYPE>::getSumOfPredecessors(uint32_t i){
         result += connections.costoArco(k,i)*connections.infoVertice(k);
     });
     return result;
-}/*
+}
+
 template <typename T, typename RESULTTYPE>
 void Net<T,RESULTTYPE>::feedForward(const vector<T> &inputVals) {
-    for (int i = dataOffset-1; i < connections.getDataSize(); ++i) {
-        //connections.predecesores();
+    //Bad parameter checking
+    if(inputVals.size() != dataOffset){
+        cout << "El vector proporcionado no corresponde en tamano a la primera capa de la red" << endl;
+        return;
     }
-}*/
+    //Primero reemplazamos el nuevo vector dentro  de connections
+    for (int j = 0; j < dataOffset; ++j) {
+        connections.setVertix(j,inputVals[j]);
+    }
+    //Hacemos las operaciones para la capa oculta
+    for (int i = dataOffset; i < connections.getDataSize(); ++i) {
+        connections.setVertix(i,1/(1+exp(SumPredArc(i))));
+    }
+}
+
+template <typename T, typename RESULTTYPE>
+void Net<T,RESULTTYPE>::backPropagation(const vector<T> &targetVals) {
+
+}
 
 #endif //HANDWRITERECOGNITION_NEURAL_NET_H
