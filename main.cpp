@@ -1,28 +1,9 @@
 #include "MACROS.h"
 #include "BMPImageLoader.h"
-#include "Neural Net.h"
-#include <random>
+#include "Neural_Net.h"
 #include <ctime>
 #include <sstream>
 
-/*
- * TODO Hacer el metodo para comparar
- * TODO Hay que guardar los vectores resultado en un archivo de alguna manera
- */
-template <typename T>
-struct Learned{
-    char tag;
-    vector<T> data;
-    Learned(vector<T> newData);
-};
-/*
- *vector<Learned<T>> vectoresResultantes    (es decir el aprendizaje)
-_______________________
-|cantidadDeVectores|TamanosVectores
-|tag|data[0]|data[1]|...|
-|tag|data[0]|data[1]|...|
-------------------------
- */
 template <typename T>
 vector<T> randomVectorGenerator(uint32_t size, int32_t minCap, int32_t maxCap){
     /*Retorna un vector con datos aleatorios*/
@@ -51,31 +32,18 @@ int main1() {
     //srand tiene que ser llamado en el main!!!!!!!!
     std::srand((unsigned int)std::time(NULL));//RANDOM!!!!!
     rand();
-    /*BMPImage<int> test;
-    test.read("C:\\Users\\Guaberx\\Desktop\\HandWriteRecognition\\Corpus\\Images\\0_Training\\_01.bmp");
-    test.normalize();
-    test.patron();
-
-    vector<int> a = test.patron();
-    test.printNormalized();
-
-    for_each(a.begin(),a.end(),[](int i){cout << "<"<<i <<"> ";}); cout << endl << endl;
-*/
 
     vector<double> iv0 = {0,0};
     vector<double> iv1 = {0,1};
     vector<double> iv2 = {1,0};
     vector<double> iv3 = {1,1};
 
-    Topology<double> top1(iv3,iv3.size(),1);
-    Net<double,bool> net1(top1,1);
+    Topology top1(iv2,2,1);
+    Net net0(top1);
 
-    vector<double> pri = net1.feedForward(iv3);
-
-    net1.printNeurons();
-    net1.printConnections();
-    cout << endl << endl;
-    for_each(pri.begin(),pri.end(),[](double i){cout << i <<", ";});cout << endl;
+    net0.printNeurons();
+    net0.feedForward(iv0);
+    net0.printNeurons();
 
     return 0;
     /*
