@@ -30,6 +30,7 @@ public:
     void setGraphReference(Graph<Neuron,double> *_graphReference){graphReference = _graphReference;}
     void setIndex(uint32_t i){inGraphIndex = i;}
     void setPredecessors(vector<uint32_t> i){predecessors = i;}
+    void setSuccessors(vector<uint32_t> i){succesors = i;}
 
     double getOSumOfProducts()const{return sumOfProducts;}
     double getTransfered()const{return transfered;}
@@ -37,13 +38,13 @@ public:
 
     void setOutputVal(double newData){transfered = newData;}
 
-    void SumProdToData(){
+    virtual void SumProdToData(){
         assert(graphReference != NULL);
         double _sumOfProducts = 0;
         uint32_t tempIndex;
         for (int i = 0; i < predecessors.size(); ++i) {
             tempIndex = predecessors.at(i);
-            _sumOfProducts += graphReference->infoVertice(tempIndex).transfered * graphReference->costoArco(i,inGraphIndex);
+            _sumOfProducts += graphReference->infoVertice(tempIndex).transfered * graphReference->costoArco(tempIndex,inGraphIndex);
         }
         sumOfProducts = _sumOfProducts;
     }
@@ -51,20 +52,54 @@ public:
     void transferFunctionDerivated(){transferedPrime = sigmoidDerivatedFunction(sumOfProducts);}
     void feedForward(){SumProdToData();transferFunction();}
 
+    uint32_t getIndex(){return inGraphIndex;}
+
     void calcOutputGradients(){}
     void calcHiddenGradients(){}
 
     void updateInputWeights(){}
+    virtual void algo()=0;
 
     friend std::ostream &operator <<(std::ostream &output, const Neuron &n){output << n.transfered; return output;}
-private:
+
+protected:
     double sumOfProducts;//La suma de las neuronas que se conectan a esta multiplicada por su respectivo arco
     double transfered;//transfer function
     double transferedPrime;//la derivada de transfer function
     uint32_t inGraphIndex;//El index de la neurona en el grafo
     vector<uint32_t> predecessors;
+    vector<uint32_t> succesors;//TODO HACER
     Graph<Neuron,double> * graphReference;
 };//Almacena la informacion y hace las operaciones para eso
+
+class InputNeuron : public Neuron{
+    void SumProdToData(){}
+    void algo(){}
+};
+class HiddenNeuron : public Neuron{
+    void algo(){
+        double expected;
+        double result;
+        double bm = result*(1-result);//El error de esa neurona
+        double am;//La sumatoria de ci(de la neurona siguiente)* el arco a la neurona siguiente  -  El error de esa neurona
+        double miu;
+        double arco;
+        double valorNeuronaInputAnterior;
+        double um = arco + miu * valorNeuronaInputAnterior * am*bm;//El nuevo valor del arco que la conecta
+    }
+
+};
+class OutputNeuron : public Neuron{
+    void algo(){
+        double expected;
+        double result;
+        double ci = (expected - result)*result*(1-result);//El error de esa neurona
+        double arco;
+        double miu;
+        double um = arco + miu*ci*result;//El nuevo valor del arco que la conecta
+    }
+
+};
 
 class Topology{
 public:
@@ -97,6 +132,8 @@ public:
     vector<double> getResult(vector<double> &inputVals) const ;
     void printNeurons(){connections.printData();}
     void printConnections(){connections.printMatrix();}
+
+    double getTest(){return connections.getData(4).getOSumOfProducts();}
 private:
     Graph<Neuron,double> connections;
     uint32_t nInputLayers;
@@ -110,7 +147,13 @@ Net::Net(Topology topology)
 {
     totalNeurons = topology.getNInputLayers()+topology.getNHiddenLayers()+topology.getNResultLayers();
     //Create the Graph
-    connections = Graph<Neuron,double>(totalNeurons);
+    //connections = Graph<Neuron,double>(totalNeurons);
+    /////////////////////////////
+    //anadimos los tipos de neuronas correspondientes a cada capa
+    connections.addElements(InputNeuron(),nInputLayers);
+    connections.addElements(HiddenNeuron(),nHiddenLayers);
+    connections.addElements(OutputNeuron(),nResultLayers);
+    ////////////////////////////
     double temp;
     //Set the Graph reference of the neurones
     for (int i = 0; i < connections.getDataSize(); ++i) {
@@ -133,13 +176,17 @@ Net::Net(Topology topology)
             connections.setArco(i,j,rand()/double(RAND_MAX));
         }
     }
+    //Predecesores, succesores y el index en el grafo de cada neurona
     vector<uint32_t> tempPredecesores;
+    vector<uint32_t> tempSucesores;
     //El index de la neurona en el grafo
     //predecessors de cada neurona
     for (int k = 0; k < totalNeurons; ++k) {
         connections.getData(k).setIndex(k);
-        tempPredecesores = connections.predecesores(k);
+        tempPredecesores = connections.predecessors(k);
+        tempSucesores = connections.successors(k);
         connections.getData(k).setPredecessors(tempPredecesores);
+        connections.getData(k).setSuccessors(tempSucesores);
     }
 }
 
@@ -157,7 +204,7 @@ void Net::feedForward(const vector<double> &inputVals) {
 }
 
 void Net::backPropagation(const vector<double> &targetVals) {
-    //The error for a neuron is: the sumatory of the derivative of the transfer function (i), i is the neuron that isthe actual neuron connects to * the weight
+    //The error for a neuron is: the sumatory of the derivative of the transfer function (i), i is the neuron that the actual neuron connects to * the weight
 
 }
 

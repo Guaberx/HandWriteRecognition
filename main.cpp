@@ -38,12 +38,13 @@ int main1() {
     vector<double> iv2 = {1,0};
     vector<double> iv3 = {1,1};
 
-    Topology top1(iv2,2,1);
+    Topology top1(iv0,2,1);
     Net net0(top1);
 
     net0.printNeurons();
     net0.feedForward(iv0);
     net0.printNeurons();
+    net0.printConnections();
 
     return 0;
     /*

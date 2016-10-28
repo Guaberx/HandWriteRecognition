@@ -70,6 +70,23 @@ public:
         }
     }
 
+    void addElements(T ElemType,uint32_t numberOfElements){
+        for (int k = 0; k < numberOfElements; ++k) {
+            data.push_back(ElemType);
+        }
+        for (int i = 0; i < numberOfElements; ++i) {
+            matrix.push_back(vector<G>());//La matriz es cuadrada y no hay conexiones
+            //Igualamos el nuevo vector
+            for (int k = 0; k < matrix.size() - 1; ++k) {//-1 porque se acabo de anadir uno y no lo queremos contar
+                matrix.at(matrix.size()-1).push_back(G(CLOSED));
+            }
+            //Le agregamos uno a cada uno de los anteriores
+            for (int j = 0; j < matrix.size(); ++j) {
+                matrix.at(j).push_back(G(CLOSED));
+            }
+        }
+    }
+
     uint32_t getDataSize()const{return data.size();}
     uint32_t getRowSize()const{return matrix.size();}
     uint32_t getColSize()const{return matrix.empty()? 0:matrix.at(0).size();}
@@ -82,8 +99,8 @@ public:
     T infoVertice(uint32_t i) const;
     G costoArco(uint32_t i,uint32_t j) const;
 
-    vector<uint32_t> predecesores(uint32_t i)const;//retorna los predecesores del vértice vi
-    vector<uint32_t> sucesores(uint32_t i)const;//retorna la lista de sucesores del vertice vi
+    vector<uint32_t> predecessors(uint32_t i)const;//retorna los predecessors del vértice vi
+    vector<uint32_t> successors(uint32_t i)const;//retorna la lista de successors del vertice vi
 
     //Persistencia
     void clean();
@@ -141,7 +158,7 @@ template <typename T, typename G>
 G Graph<T,G>::costoArco(uint32_t i,uint32_t j) const{ return matrix.at(i).at(j);};
 
 template <typename T, typename G>
-vector<uint32_t> Graph<T,G>::predecesores(uint32_t i)const{
+vector<uint32_t> Graph<T,G>::predecessors(uint32_t i)const{
     vector<uint32_t> result;
     for (uint32_t j = 0; j < matrix.size(); ++j) {
         if(matrix.at(j).at(i) != CLOSED){
@@ -152,11 +169,12 @@ vector<uint32_t> Graph<T,G>::predecesores(uint32_t i)const{
 };
 
 template <typename T, typename G>
-vector<uint32_t> Graph<T,G>::sucesores(uint32_t i)const{
+vector<uint32_t> Graph<T,G>::successors(uint32_t i)const{
     vector<uint32_t> result;
     for (uint32_t j = 0; j < matrix.size(); ++j) {
-        if(matrix.at(i).at(j) != CLOSED)
+        if(matrix.at(i).at(j) != CLOSED) {
             result.push_back(j);
+        }
     }
     return result;
 };
