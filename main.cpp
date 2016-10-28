@@ -4,17 +4,7 @@
 #include <ctime>
 #include <sstream>
 
-template <typename T>
-vector<T> randomVectorGenerator(uint32_t size, int32_t minCap, int32_t maxCap){
-    /*Retorna un vector con datos aleatorios*/
-    vector<T> randomVector;
-    int32_t range = maxCap-minCap;
-    for (int i = 0; i < size; ++i) {
-        randomVector.push_back(((T)(rand()%range + minCap))/100);//Asi lo toma como un float
-    }
-    return move(randomVector);
-}
-
+//IGNORA ESTO HASTA EL MAIN.
 string easyPathOfFolder(const string folderPath, const int fileNumeration, const string prefix, const string postfix){
     //Helps getting the path of enumerated files in a folder
     string result = folderPath;
@@ -29,6 +19,10 @@ string easyPathOfFolder(const string folderPath, const int fileNumeration, const
 }
 
 int main1() {
+    /*TODO Lee los comentarios de Neural_Net.h, Intenta No cambiar el grafo o lo de las imagenes
+     *TODO Ponele 8 neuronas de salida, utiliza Topology para definir la red
+     *TODO El vector de una imagen se consigue cargando la imagen y llamando la funcion patron() que retorna un vector
+     */
     //srand tiene que ser llamado en el main!!!!!!!!
     std::srand((unsigned int)std::time(NULL));//RANDOM!!!!!
     rand();

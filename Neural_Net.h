@@ -23,22 +23,26 @@ double sigmoidDerivatedFunction(double x){
 
 class Neuron{
 public:
+    //Constructoras
     Neuron():transfered(-1),graphReference(NULL){}
     Neuron(Graph<Neuron,double> * _graphReference):graphReference(_graphReference){}
     Neuron(Graph<Neuron,double> * _graphReference,double newData):graphReference(_graphReference),transfered(newData){}
 
+    //Sets de informacion sobre el entorno en el que se encuentra la neurona
     void setGraphReference(Graph<Neuron,double> *_graphReference){graphReference = _graphReference;}
     void setIndex(uint32_t i){inGraphIndex = i;}
     void setPredecessors(vector<uint32_t> i){predecessors = i;}
     void setSuccessors(vector<uint32_t> i){succesors = i;}
 
-    double getOSumOfProducts()const{return sumOfProducts;}
-    double getTransfered()const{return transfered;}
-    double getTransferedPrime()const{return transferedPrime;}
+    //Set
+    void setOutputVal(double newData){transfered = newData;}//transfered es el valor de salida de cada neurona
 
-    void setOutputVal(double newData){transfered = newData;}
+    double getOSumOfProducts()const{return sumOfProducts;}//La sumatoria de los arcos que se conectan a esta neurona por las neuronas conectadas a esos arcos
+    double getTransfered()const{return transfered;}//Retorna el output de la neurona
+    double getTransferedPrime()const{return transferedPrime;}//Retorna la derivada del valor de la neurona
 
     virtual void SumProdToData(){
+        //La sumatoria de los arcos por el valor de la neurona anterior se guarda en sumOfProducts
         assert(graphReference != NULL);
         double _sumOfProducts = 0;
         uint32_t tempIndex;
@@ -48,29 +52,30 @@ public:
         }
         sumOfProducts = _sumOfProducts;
     }
-    void transferFunction(){transfered = sigmoidEquation(sumOfProducts);}
-    void transferFunctionDerivated(){transferedPrime = sigmoidDerivatedFunction(sumOfProducts);}
-    void feedForward(){SumProdToData();transferFunction();}
+    void transferFunction(){transfered = sigmoidEquation(sumOfProducts);}//Funcion para normalizar el valor entre [0,1]
+    void transferFunctionDerivated(){transferedPrime = sigmoidDerivatedFunction(sumOfProducts);}//Derivada de la funcion anterior
+    void feedForward(){SumProdToData();transferFunction();}//Realiza esas dos funciones
 
-    uint32_t getIndex(){return inGraphIndex;}
+    uint32_t getIndex(){return inGraphIndex;}//Retorna el index de esta neurona en el grafo
 
     void calcOutputGradients(){}
     void calcHiddenGradients(){}
 
     void updateInputWeights(){}
-    virtual void algo()=0;
+    virtual void algo()=0;//TODO   ESTA ES LA FUNCUION QUE HAY QUE HACER EN LAS NEURONAS. LLAMALA COMO QUERAS
 
+    //Overload del operador <<
     friend std::ostream &operator <<(std::ostream &output, const Neuron &n){output << n.transfered; return output;}
 
 protected:
     double sumOfProducts;//La suma de las neuronas que se conectan a esta multiplicada por su respectivo arco
-    double transfered;//transfer function
+    double transfered;//transfer function. Guarda El valor de la funcion con su respectivo sigmoid. es el valor con el cual se calculan las cosas y el valor de retorno en la ultima capa
     double transferedPrime;//la derivada de transfer function
     uint32_t inGraphIndex;//El index de la neurona en el grafo
-    vector<uint32_t> predecessors;
-    vector<uint32_t> succesors;//TODO HACER
-    Graph<Neuron,double> * graphReference;
-};//Almacena la informacion y hace las operaciones para eso
+    vector<uint32_t> predecessors;//Lista de indexes de las neuronas que se conectan con esta neurona
+    vector<uint32_t> succesors;//Lista de indexes de neuronas a las cuales se conecta esta neurona
+    Graph<Neuron,double> * graphReference;//Una referencia al grafo para poder modificar los arcos
+};
 
 class InputNeuron : public Neuron{
     void SumProdToData(){}
@@ -78,6 +83,9 @@ class InputNeuron : public Neuron{
 };
 class HiddenNeuron : public Neuron{
     void algo(){
+        /*
+         * Esta funcion tiene que calcular el nuevo peso de los arcos que se conectan a esta neurona
+         */
         double expected;
         double result;
         double bm = result*(1-result);//El error de esa neurona
@@ -91,6 +99,9 @@ class HiddenNeuron : public Neuron{
 };
 class OutputNeuron : public Neuron{
     void algo(){
+        /*
+         * Esta funcion tiene que calcular el nuevo peso de los arcos que se conectan a esta neurona
+         */
         double expected;
         double result;
         double ci = (expected - result)*result*(1-result);//El error de esa neurona
@@ -101,6 +112,7 @@ class OutputNeuron : public Neuron{
 
 };
 
+//(cuantas neuronas tiene la primera capa, cuantas neuronas tiene la capa oculta, cuantas neuronas tiene la capa de salida)
 class Topology{
 public:
     Topology(vector<double>& _inputLayers, uint32_t _nHiddenLayers, uint32_t _nResultLayers)
@@ -125,21 +137,20 @@ public:
     //ResultLayers contiene lo del resultado.
     Net(Topology topology);
 
-    void train(const vector<double> &inputVals, const vector<double> &wantedVal);
+    void train(const vector<double> &inputVals, const vector<double> &wantedVal);//TODO INVENTATELA. UTILIZA backPropagation y feedForward
 
-    void feedForward(const vector<double> &inputVals);
-    void backPropagation(const vector<double> &targetVals);//Calculate the error for each output neuron
-    vector<double> getResult(vector<double> &inputVals) const ;
-    void printNeurons(){connections.printData();}
-    void printConnections(){connections.printMatrix();}
+    void feedForward(const vector<double> &inputVals);//Actualia todas las neuronas dependiendo del vector de entrada entregado
+    void backPropagation(const vector<double> &targetVals);//Calculate the error for each output neuron //TODO AQUI SE LLAMA LA FUNCION algo() DE CADA NEURONA
+    vector<double> getResult(vector<double> &inputVals) const ;//TODO Simplemente es feedForward y que retorne la capa de salida de la red
+    void printNeurons(){connections.printData();}//Imprime el vector del grafo
+    void printConnections(){connections.printMatrix();}//Imprime la matriz del grafo
 
-    double getTest(){return connections.getData(4).getOSumOfProducts();}
 private:
     Graph<Neuron,double> connections;
-    uint32_t nInputLayers;
-    uint32_t nHiddenLayers;
-    uint32_t nResultLayers;
-    uint32_t totalNeurons;
+    uint32_t nInputLayers;//Numero de neuronas en la primera capa
+    uint32_t nHiddenLayers;//Numero de neuronas en la capa oculta
+    uint32_t nResultLayers;//Numero de neuronas de salida
+    uint32_t totalNeurons;//Numero Total de neuronas
 };
 
 Net::Net(Topology topology)
@@ -147,7 +158,6 @@ Net::Net(Topology topology)
 {
     totalNeurons = topology.getNInputLayers()+topology.getNHiddenLayers()+topology.getNResultLayers();
     //Create the Graph
-    //connections = Graph<Neuron,double>(totalNeurons);
     /////////////////////////////
     //anadimos los tipos de neuronas correspondientes a cada capa
     connections.addElements(InputNeuron(),nInputLayers);
