@@ -29,14 +29,19 @@ public:
     void train(const vector<double> &inputVals, const vector<double> &wantedVal);//TODO INVENTATELA. UTILIZA backPropagation y feedForward
 
     void setInputLayer(const vector<double> &inputVals);
+    void feedForward(const vector<double> &inputVals);//Activa las neuronas y cada neurona sala su sumatoria de las anteriores por sus arcos
 
-    void feedForward(const vector<double> &inputVals);//Actualia todas las neuronas dependiendo del vector de entrada entregado
+    void calculateError(vector<double>&targetVals);//TODO HACIENDO ESTA!!!!
+    void calculateErrorDerivative(vector<double>&targetVals);//TODO HACIENDO ESTA!!!! No se usa porque calculamos la derivada en la funcion anterior
+
     void backPropagation(const vector<double> &targetVals);//Calculate the error for each output neuron //TODO AQUI SE LLAMA LA FUNCION algo() DE CADA NEURONA
     vector<double> getResult(vector<double> &inputVals);//TODO Simplemente es feedForward y que retorne la capa de salida de la red
     void printNeurons();//Imprime el vector del grafo
     void printConnections();//Imprime la matriz del grafo
 
 private:
+    double totalSquaredError;
+
     Graph<Neuron,double> connections;
     uint32_t nBiasLayers;
     uint32_t nInputLayers;//Numero de neuronas en la primera capa

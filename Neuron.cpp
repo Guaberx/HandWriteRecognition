@@ -13,7 +13,7 @@ double sigmoidDerivatedFunction(double x){
 
 //Constructoras
 Neuron::Neuron():transfered(1),transferedPrime(0),graphReference(NULL),inGraphIndex(0),sumOfProducts(0),
-         miu(0.1),es(0),ed(0){}
+         miu(0.1),es(0),ed(0),squaredError(0),squaredErrorDerivative(0){}
 Neuron::~Neuron(){
 //cout << "Neurona " << inGraphIndex << " Destruida" << endl;
 }
@@ -25,10 +25,16 @@ void Neuron::setPredecessors(vector<uint32_t> i){predecessors = i;}
 void Neuron::setSuccessors(vector<uint32_t> i){succesors = i;}
 
 //Set
-void Neuron::setOutputVal(double newData){transfered = newData; transferedPrime = newData*(1-newData);}//transfered es el valor de salida de cada neurona
+void Neuron::setOutputVal(double newData){
+    transfered = newData; transferedPrime = newData*(1-newData);
+}//transfered es el valor de salida de cada neurona
 
-double Neuron::getTransfered()const{return transfered;}//Retorna el output de la neurona
-double Neuron::getTransferedPrime()const{return transferedPrime;}//Retorna la derivada del valor de la neurona
+double Neuron::getTransfered()const{
+    return transfered;
+}//Retorna el output de la neurona
+double Neuron::getTransferedPrime()const{
+    return transferedPrime;
+}//Retorna la derivada del valor de la neurona
 
 void Neuron::SumProdToData(){
     //La sumatoria de los arcos por el valor de la neurona anterior se guarda en sumOfProducts
@@ -49,20 +55,40 @@ void Neuron::SumProdToData(){
 }
 void Neuron::transferFunction(double x){
     transfered = sigmoidEquation(x);
-    transferedPrime = transfered * (1 - transfered);
-}//Funcion para normalizar el valor entre [0,1]
+}//Funcion para normalizar el valor entre [0,1]/
+/*
 void Neuron::transferFunctionDerivative(double x){
     transferedPrime = sigmoidDerivatedFunction(x);
-}//Funcion para normalizar el valor entre [0,1]
+}//Funcion para normalizar el valor entre [0,1]*/
 void Neuron::feedForward(){
     SumProdToData();
-    transferFunction(sumOfProducts);}//Realiza esas dos funciones
+    transferFunction(sumOfProducts);
+}//Realiza esas dos funciones
 
-uint32_t Neuron::getIndex(){return inGraphIndex;}//Retorna el index de esta neurona en el grafo
+void Neuron::calculateSquaredError(double target){
+    squaredError = (pow((target - transfered),2))/2;//transfered es el output
+}
+void Neuron::calculateSquaredErrorDerivative(double target){
+    squaredErrorDerivative = (transfered - target);//-(target - out)
+}
+void Neuron::calculatedOutdNet(){
+    transferedPrime = transfered*(1-transfered);
+}
+double Neuron::getSquaredError()const{
+    return squaredError;
+}
+double Neuron::getSquaredErrorDerivative()const{
+    return squaredErrorDerivative;
+}
+double Neuron::getdOutdNet()const{
+    return transferedPrime;
+}
+
+uint32_t Neuron::getIndex()const{return inGraphIndex;}//Retorna el index de esta neurona en el grafo
 
 ///NEW///
-double Neuron::getES(){return es;}
-double Neuron::getED(){return ed;}
+double Neuron::getES()const{return es;}
+double Neuron::getED()const{return ed;}
 
 //Calculate es
 void Neuron::calculateED(){

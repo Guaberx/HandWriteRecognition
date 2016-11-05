@@ -4,7 +4,8 @@
 #include "Neural_Net.h"
 
 Net::Net(Topology topology)
-        :nInputLayers(topology.getNInputLayers()),
+        :totalSquaredError(0),
+         nInputLayers(topology.getNInputLayers()),
          nHiddenLayers(topology.getNHiddenLayers()),
          nResultLayers(topology.getNResultLayers()),
          nBiasLayers(2),
@@ -70,6 +71,19 @@ void Net::feedForward(const vector<double> &inputVals) {
         if(DEBUG)cout << "Data of the " << i <<"th neuron = " << connections.getData(i).getTransfered() <<endl;// << endl;
     }
     //Despues de esto cada neurona esta activada
+}
+
+void Net::calculateError(vector<double>&targetVals){
+    totalSquaredError = 0;//reseteamos cada vez para ver el nuevo error
+    double target;
+    for (int i = 0; i < nResultLayers; ++i) {
+        target = targetVals.at(i);
+        //2+nInputLayers+nHiddenLayers porque vamos a evaluar la ultima capa
+        connections.getData(i+2+nInputLayers+nHiddenLayers).calculateSquaredError(target);//El error
+        connections.getData(i+2+nInputLayers+nHiddenLayers).calculateSquaredErrorDerivative(target);//Derivada del error
+        totalSquaredError += connections.getData(i+2+nInputLayers+nHiddenLayers).getSquaredError();
+    }
+    if(DEBUG)cout << "Total Squared Error = " << totalSquaredError << endl;
 }
 
 void Net::backPropagation(const vector<double> &targetVals) {

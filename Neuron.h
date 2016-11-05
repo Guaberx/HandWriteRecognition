@@ -10,6 +10,7 @@
 #include "Graph/Graph.h"
 #include <cassert>
 using std::exp;
+using std::pow;
 using std::rand;
 using std::sqrt;
 
@@ -35,14 +36,26 @@ public:
 
     void SumProdToData();
     void transferFunction(double x);//Funcion para normalizar el valor entre [0,1]
-    void transferFunctionDerivative(double x);;//Funcion para normalizar el valor entre [0,1]
+    //void transferFunctionDerivative(double x);//Funcion para normalizar el valor entre [0,1]
 
     void feedForward();//Realiza esas dos funciones
 
-    uint32_t getIndex();//Retorna el index de esta neurona en el grafo
+    //Estas son para neuronas de la layer output
+    void calculateSquaredError(double target);
+    void calculateSquaredErrorDerivative(double target);
+    void calculatedOutdNet();
+    void calculatedNetdWi(uint32_t w);//En esta el cambio es diferente por cada predecesor.
+    void calculatedEtotaldWi(uint32_t w);
+    double getSquaredError()const;//aka ETotal
+    double getSquaredErrorDerivative()const;//aka dETotal/dOut[i], the change of the error with respect to the output
+    double getdOutdNet()const;//la derivada de la funcion de activacion
+    double getdNetdWi();//total net input of o1 change with respect to w_i
+    double getdEtotaltdWi();//total error o1 change with respect to w_i
 
-    double getES();//El error
-    double getED();//El cambio a las conexiones con la neurona
+    uint32_t getIndex()const;//Retorna el index de esta neurona en el grafo
+
+    double getES()const;//El error
+    double getED()const;//El cambio a las conexiones con la neurona
 
     void calculateED();
     void updateWeights();
@@ -53,6 +66,8 @@ protected:
     double sumOfProducts;//La suma de las neuronas que se conectan a esta multiplicada por su respectivo arco
     double transfered;//transfer function. Guarda El valor de la funcion con su respectivo sigmoid. es el valor con el cual se calculan las cosas y el valor de retorno en la ultima capa
     double transferedPrime;//la derivada de transfer function
+    double squaredError;
+    double squaredErrorDerivative;
     uint32_t inGraphIndex;//El index de la neurona en el grafo
     vector<uint32_t> predecessors;//Lista de indexes de las neuronas que se conectan con esta neurona
     vector<uint32_t> succesors;//Lista de indexes de neuronas a las cuales se conecta esta neurona
