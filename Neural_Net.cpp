@@ -76,14 +76,32 @@ void Net::feedForward(const vector<double> &inputVals) {
 void Net::calculateError(vector<double>&targetVals){
     totalSquaredError = 0;//reseteamos cada vez para ver el nuevo error
     double target;
+    //Primero la capa output
     for (int i = 0; i < nResultLayers; ++i) {
         target = targetVals.at(i);
         //2+nInputLayers+nHiddenLayers porque vamos a evaluar la ultima capa
         connections.getData(i+2+nInputLayers+nHiddenLayers).calculateSquaredError(target);//El error
         connections.getData(i+2+nInputLayers+nHiddenLayers).calculateSquaredErrorDerivative(target);//Derivada del error
+        connections.getData(i+2+nInputLayers+nHiddenLayers).calculatedOutdNet();
+        connections.getData(i+2+nInputLayers+nHiddenLayers).calculatedNetdWi();
+        connections.getData(i+2+nInputLayers+nHiddenLayers).calculatedEtotaldWi();
         totalSquaredError += connections.getData(i+2+nInputLayers+nHiddenLayers).getSquaredError();
     }
+    //Luego la capa hidden
+    for (int j = 0; j < nHiddenLayers + 1; ++j) {//+1 para que la neurona bias actualice tambien
+        connections.getData(j+1+nInputLayers).calculateSquaredError(target);//El error
+        connections.getData(j+1+nInputLayers).calculateSquaredErrorDerivative(target);//Derivada del error
+        connections.getData(j+1+nInputLayers).calculatedOutdNet();
+        connections.getData(j+1+nInputLayers).calculatedNetdWi();
+        connections.getData(j+1+nInputLayers).calculatedEtotaldWi();
+    }
     if(DEBUG)cout << "Total Squared Error = " << totalSquaredError << endl;
+}
+
+void Net::updateWeights(){
+    for (int i = totalNeurons-1; i > nInputLayers; --i) {
+        connections.getData(i).updateWeights();
+    }
 }
 
 void Net::backPropagation(const vector<double> &targetVals) {

@@ -74,6 +74,17 @@ void Neuron::calculateSquaredErrorDerivative(double target){
 void Neuron::calculatedOutdNet(){
     transferedPrime = transfered*(1-transfered);
 }
+void Neuron::calculatedNetdWi(){
+    for_each(predecessors.begin(),predecessors.end(),[this](uint32_t i){
+        dNetdWi.push_back(graphReference->getData(i).getTransfered());
+    });
+}
+void Neuron::calculatedEtotaldWi(){
+    for_each(dNetdWi.begin(),dNetdWi.end(),[this](double i){
+        //i es el valor de activacion de la neurona anterior
+        weightsUpdate.push_back(i*squaredErrorDerivative*transferedPrime);
+    });
+}
 double Neuron::getSquaredError()const{
     return squaredError;
 }
@@ -82,6 +93,24 @@ double Neuron::getSquaredErrorDerivative()const{
 }
 double Neuron::getdOutdNet()const{
     return transferedPrime;
+}
+vector<double> Neuron::getdNetdWi(){
+    return dNetdWi;
+}
+vector<double> Neuron::getdEtotaltdWi(){
+    return weightsUpdate;
+}
+
+void Neuron::calculateSquaredErrorDerivativeH(){
+    //Es la suma de los errores de las neuronas siguientes
+    /*
+     * dE0i/dNeti = squaredErrorDerivative[i]*transferedDerivative[i]
+     * SUM     (dNeti/dOuti = arco(self,i)*dE0i/dNeti)
+     */
+    squaredErrorDerivative = 0;
+    for_each(succesors.begin(),succesors.end(),[this](uint32_t i){
+        squaredErrorDerivative += graphReference->getArco(inGraphIndex,i)*(graphReference->getData(i).getSquaredErrorDerivative()*graphReference->getData(i).getdOutdNet());
+    });
 }
 
 uint32_t Neuron::getIndex()const{return inGraphIndex;}//Retorna el index de esta neurona en el grafo
@@ -98,10 +127,10 @@ void Neuron::calculateED(){
     });
 }
 void Neuron::updateWeights(){
-    double newWeightValue;
-    //cout << "NEURONA: " << inGraphIndex << "| ES = " << es << "  ED = " << ed <<endl;
-    for_each(predecessors.begin(),predecessors.end(),[this,&newWeightValue](uint32_t i){
-        newWeightValue = graphReference->getArco(i,inGraphIndex) + ed * miu;//miu = Learning Rate
-        graphReference->setArco(i,inGraphIndex,newWeightValue);
+    uint32_t j = 0;
+    double temp;
+    for_each(predecessors.begin(),predecessors.end(),[this,&temp,&j](uint32_t i){
+        temp = graphReference->costoArco(i,inGraphIndex) - miu*weightsUpdate.at(j++);//El valor del arco menos el error
+        graphReference->setArco(i,inGraphIndex,temp);
     });
 }

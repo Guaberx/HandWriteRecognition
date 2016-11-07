@@ -44,13 +44,18 @@ public:
     void calculateSquaredError(double target);
     void calculateSquaredErrorDerivative(double target);
     void calculatedOutdNet();
-    void calculatedNetdWi(uint32_t w);//En esta el cambio es diferente por cada predecesor.
-    void calculatedEtotaldWi(uint32_t w);
+    void calculatedNetdWi();//En esta el cambio es diferente por cada predecesor.
+    void calculatedEtotaldWi();
     double getSquaredError()const;//aka ETotal
     double getSquaredErrorDerivative()const;//aka dETotal/dOut[i], the change of the error with respect to the output
     double getdOutdNet()const;//la derivada de la funcion de activacion
-    double getdNetdWi();//total net input of o1 change with respect to w_i
-    double getdEtotaltdWi();//total error o1 change with respect to w_i
+    vector<double> getdNetdWi();//total net input of o1 change with respect to w_i
+    vector<double> getdEtotaltdWi();//total error o1 change with respect to w_i
+
+    //Estas son para la capa oculta. tambien se utilizan de la capa output, pues hay funciones similares
+    void calculateSquaredErrorDerivativeH();
+    void calculatedOutdNetH();//La sumatoria de dOutdNet!!!!!!!!!!!!!!!!!!!
+
 
     uint32_t getIndex()const;//Retorna el index de esta neurona en el grafo
 
@@ -68,6 +73,8 @@ protected:
     double transferedPrime;//la derivada de transfer function
     double squaredError;
     double squaredErrorDerivative;
+    vector<double> dNetdWi;// La derivada de la sumatoria de los arcos por las neuronas anteriores respecto a un arco particular
+    vector<double> weightsUpdate;//Contiene en orden de los predecesores cuanto se le tiene que restar a cada arco
     uint32_t inGraphIndex;//El index de la neurona en el grafo
     vector<uint32_t> predecessors;//Lista de indexes de las neuronas que se conectan con esta neurona
     vector<uint32_t> succesors;//Lista de indexes de neuronas a las cuales se conecta esta neurona

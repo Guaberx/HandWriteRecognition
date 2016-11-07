@@ -34,6 +34,10 @@ public:
     void calculateError(vector<double>&targetVals);//TODO HACIENDO ESTA!!!!
     void calculateErrorDerivative(vector<double>&targetVals);//TODO HACIENDO ESTA!!!! No se usa porque calculamos la derivada en la funcion anterior
 
+    void updateWeights();
+
+    double getError(){return totalSquaredError;}
+
     void backPropagation(const vector<double> &targetVals);//Calculate the error for each output neuron //TODO AQUI SE LLAMA LA FUNCION algo() DE CADA NEURONA
     vector<double> getResult(vector<double> &inputVals);//TODO Simplemente es feedForward y que retorne la capa de salida de la red
     void printNeurons();//Imprime el vector del grafo

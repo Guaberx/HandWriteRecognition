@@ -121,17 +121,16 @@ public:
     }
     //Destructora
     ~Graph(){
-        for_each(data.begin(),data.end(),[](T i){i.~T();});
+        /*for_each(data.begin(),data.end(),[](T i){i.~T();});
         for_each(matrix.begin(),matrix.end(),[](vector<G> j) {
             for_each(j.begin(),j.end(),[](G k){k.~G();});
-        });
+        });*/
         clean();
     }//Devuelve al sistema toda la memoria dinamica utilizada
 private:
     vector<T> data;
     vector<vector<G>> matrix;
 };
-
 
 template <typename T, typename G>
 void Graph<T,G>::insVertix(T newElem){
