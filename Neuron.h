@@ -41,6 +41,8 @@ public:
     void feedForward();//Realiza esas dos funciones
 
     //Estas son para neuronas de la layer output
+    void cforO(double target);
+    void cforH();
     void calculateSquaredError(double target);
     void calculateSquaredErrorDerivative(double target);
     void calculatedOutdNet();
@@ -54,15 +56,13 @@ public:
 
     //Estas son para la capa oculta. tambien se utilizan de la capa output, pues hay funciones similares
     void calculateSquaredErrorDerivativeH();
-    void calculatedOutdNetH();//La sumatoria de dOutdNet!!!!!!!!!!!!!!!!!!!
 
+    void printWeightsUpdates();
+    void printPredeccessors();
+    void printSuccessors();
 
     uint32_t getIndex()const;//Retorna el index de esta neurona en el grafo
 
-    double getES()const;//El error
-    double getED()const;//El cambio a las conexiones con la neurona
-
-    void calculateED();
     void updateWeights();
 
     friend std::ostream &operator <<(std::ostream &output, const Neuron &n){output << n.transfered; return output;}
@@ -80,7 +80,5 @@ protected:
     vector<uint32_t> succesors;//Lista de indexes de neuronas a las cuales se conecta esta neurona
     Graph<Neuron,double> * graphReference;//Una referencia al grafo para poder modificar los arcos
     double miu;
-    double es;//Error Signal
-    double ed;//Error Derivative
 };
 #endif //HANDWRITERECOGNITION_NEURON_H

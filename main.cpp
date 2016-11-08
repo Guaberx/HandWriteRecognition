@@ -76,49 +76,32 @@ int main() {
     vector<double> r2 = {1};
     vector<double> r3 = {0};
 
-    cout << exp(0.2)/(0.2*7) << endl;
+    vector<vector<double>> inputVals;
+    vector<vector<double>> expectedVals;
+    inputVals.push_back(iv0),inputVals.push_back(iv1),inputVals.push_back(iv2),inputVals.push_back(iv3);
+    expectedVals.push_back(r0),expectedVals.push_back(r1),expectedVals.push_back(r2),expectedVals.push_back(r3);
 
     Topology top1(2,2,1);
     Net net0(top1);
+    net0.printAllPredecessors();
+    net0.printAllSuccessors();
 
+    net0.train(inputVals,expectedVals,1000);
+
+    net0.feedForward(iv0);
     net0.printNeurons();
-    net0.printConnections();cout << endl;
 
-    for (int i = 0; i < 100; ++i) {
+    net0.feedForward(iv1);
+    net0.printNeurons();
 
+    net0.feedForward(iv2);
+    net0.printNeurons();
 
-        net0.feedForward(iv0);
-        if(DEBUG)net0.printNeurons();
-        if(DEBUG)net0.printConnections();
-        if(DEBUG)cout << endl;
-        net0.calculateError(r0);
-        net0.updateWeights();
-        cout << "0 Error: " << net0.getError() << endl;
+    net0.feedForward(iv3);
+    net0.printNeurons();
 
-        net0.feedForward(iv1);
-        if(DEBUG)net0.printNeurons();
-        if(DEBUG)net0.printConnections();
-        if(DEBUG)cout << endl;
-        net0.calculateError(r1);
-        net0.updateWeights();
-        cout << "1 Error: " << net0.getError() << endl;
+    getchar();
 
-        net0.feedForward(iv2);
-        if(DEBUG)net0.printNeurons();
-        if(DEBUG)net0.printConnections();
-        if(DEBUG)cout << endl;
-        net0.calculateError(r2);
-        net0.updateWeights();
-        cout << "2 Error: " << net0.getError() << endl;
-
-        net0.feedForward(iv3);
-        if(DEBUG)net0.printNeurons();
-        if(DEBUG)net0.printConnections();
-        if(DEBUG)cout << endl;
-        net0.calculateError(r3);
-        net0.updateWeights();
-        cout << "3 Squared Error: " << net0.getError() << endl;
-    }
     return 0;
     /*
      * Guardar imagen en vector                                                     V

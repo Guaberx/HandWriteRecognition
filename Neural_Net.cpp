@@ -2,7 +2,7 @@
 // Created by Guaberx on 11/4/2016.
 //
 #include "Neural_Net.h"
-
+#define DEBUG2 1
 Net::Net(Topology topology)
         :totalSquaredError(0),
          nInputLayers(topology.getNInputLayers()),
@@ -22,7 +22,7 @@ Net::Net(Topology topology)
         connections.getData(i).setGraphReference(&connections);
     }
     //Set Connections from input and bias layers to hiddelLayer
-    for (int j = 1+nInputLayers; j < 1+1+nInputLayers+nHiddenLayers; ++j) {
+    for (int j = 1+1+nInputLayers; j < 1+1+nInputLayers+nHiddenLayers; ++j) {
         for (int i = 0; i < 1+nInputLayers; ++i) {//Comienza desde 0 para tomar el bias
             connections.setArco(i,j,rand()/double(RAND_MAX));
         }
@@ -59,8 +59,39 @@ void Net::setInputLayer(const vector<double> &inputVals){
     for_each(inputVals.begin(),inputVals.end(),[this,&tempIndex](double i){connections.getData(tempIndex++).setOutputVal(i);});
 }
 
-void Net::train(const vector<double> &inputVals, const vector<double> &wantedVal) {
-
+void Net::train(const vector<vector<double>> &inputVals, const vector<vector<double>> &wantedVal, uint32_t times) {
+    assert(inputVals.size() == wantedVal.size());//Cada uno debe tener un respectivo resultado
+    uint32_t j = 0;
+    uint32_t loop = 0;
+    vector<double> tempWantedVal;
+    double temp;
+    for (int i = 0; i < times; ++i) {
+        j = 0;
+        loop = 1;
+        if(DEBUG2)cout << "Epoch: "<< i+1 << endl;
+        for_each(inputVals.begin(),inputVals.end(),[this,&j,&wantedVal,&tempWantedVal,&temp,&loop](vector<double> iv){
+            lastResult.clear();
+            feedForward(iv);
+            tempWantedVal = wantedVal.at(j++);
+            calculateError(tempWantedVal);
+            updateWeights();
+            //Copiamos el vector resultado en last Result
+            for (int k = 0; k < nResultLayers; ++k) {
+                temp = connections.getData(2+nInputLayers+nHiddenLayers+k).getTransfered();
+                lastResult.push_back(temp);
+            }
+            if(DEBUG2){
+                cout << loop++ << ": ";
+                for_each(tempWantedVal.begin(),tempWantedVal.end(),[](double ev){
+                    cout << "<" << ev << ">";
+                });cout << " vs ";
+                for_each(lastResult.begin(),lastResult.end(),[](double ls){
+                    cout << "<" << ls << ">";
+                });cout << "  S_Error = " << totalSquaredError <<endl;
+                //printAllWeightsUpdates();
+            }
+        });
+    }
 }
 
 void Net::feedForward(const vector<double> &inputVals) {
@@ -77,7 +108,7 @@ void Net::calculateError(vector<double>&targetVals){
     totalSquaredError = 0;//reseteamos cada vez para ver el nuevo error
     double target;
     //Primero la capa output
-    for (int i = 0; i < nResultLayers; ++i) {
+    /*for (int i = 0; i < nResultLayers; ++i) {
         target = targetVals.at(i);
         //2+nInputLayers+nHiddenLayers porque vamos a evaluar la ultima capa
         connections.getData(i+2+nInputLayers+nHiddenLayers).calculateSquaredError(target);//El error
@@ -89,47 +120,55 @@ void Net::calculateError(vector<double>&targetVals){
     }
     //Luego la capa hidden
     for (int j = 0; j < nHiddenLayers + 1; ++j) {//+1 para que la neurona bias actualice tambien
-        connections.getData(j+1+nInputLayers).calculateSquaredError(target);//El error
-        connections.getData(j+1+nInputLayers).calculateSquaredErrorDerivative(target);//Derivada del error
-        connections.getData(j+1+nInputLayers).calculatedOutdNet();
-        connections.getData(j+1+nInputLayers).calculatedNetdWi();
-        connections.getData(j+1+nInputLayers).calculatedEtotaldWi();
+        connections.getData(j+2+nInputLayers).calculateSquaredErrorDerivativeH();
+        connections.getData(j+2+nInputLayers).calculatedOutdNet();
+        connections.getData(j+2+nInputLayers).calculatedNetdWi();//En esta el cambio es diferente por cada predecesor.
+        connections.getData(j+2+nInputLayers).calculatedEtotaldWi();
+    }*/
+    //Primero la capa output
+    for (int i = 0; i < nResultLayers; ++i) {
+        target = targetVals.at(i);
+        //2+nInputLayers+nHiddenLayers porque vamos a evaluar la ultima capa
+        connections.getData(i+2+nInputLayers+nHiddenLayers).calculateSquaredError(target);//El error
+        totalSquaredError += connections.getData(i+2+nInputLayers+nHiddenLayers).getSquaredError();
+        connections.getData(i+2+nInputLayers+nHiddenLayers).cforO(target);
+    }
+    //Luego la capa hidden
+    for (int j = 0; j < nHiddenLayers + 1; ++j) {//+1 para que la neurona bias actualice tambien
+        connections.getData(j+2+nInputLayers).cforH();
     }
     if(DEBUG)cout << "Total Squared Error = " << totalSquaredError << endl;
 }
 
 void Net::updateWeights(){
-    for (int i = totalNeurons-1; i > nInputLayers; --i) {
+    for (int i = totalNeurons-1; i > nInputLayers+1; --i) {
         connections.getData(i).updateWeights();
+    }
+}
+
+void Net::printAllWeightsUpdates(){
+    for (int i = 0; i < connections.getDataSize(); ++i) {
+        connections.getData(i).printWeightsUpdates();
+    }
+}
+void Net::printAllPredecessors(){
+    for (int i = 0; i < connections.getDataSize(); ++i) {
+        connections.getData(i).printPredeccessors();
+    }
+}
+void Net::printAllSuccessors(){
+    for (int i = 0; i < connections.getDataSize(); ++i) {
+        connections.getData(i).printSuccessors();
     }
 }
 
 void Net::backPropagation(const vector<double> &targetVals) {
     assert(nResultLayers == targetVals.size());
-    //Primero las neuronas de salida
-    uint32_t j = 0;
-    double temp = 0;
-    for (int i = nBiasLayers+nInputLayers+nHiddenLayers; i < totalNeurons; ++i) {
-        temp = targetVals.at(j++);
-        //connections.getData(i).calculateES(temp);//TODO CUIDADO AQUI CON SGV
-    }
-    //Ahora las neuronas ocultas
-    for (int k = nBiasLayers+nInputLayers; k < nBiasLayers+nInputLayers+nHiddenLayers; ++k) {
-        //connections.getData(k).calculateES(0);//TODO CUIDADO AQUI CON SGV
-    }
-    for (int l = nBiasLayers+nInputLayers; l < totalNeurons; ++l) {
-        connections.getData(l).calculateED();
-    }
-    for (int l = totalNeurons-1; l >= 0; --l) {
-        connections.getData(l).updateWeights();
-    }
+
 }
 
 vector<double> Net::getResult(vector<double> &inputVals) {
-    //feedForward(inputVals);//TODO PROBLEMA EN ESTA FUNCION
-    /*for (int i = 2+nInputLayers+nHiddenLayers; i < totalNeurons; ++i) {
-        cout << "Result: " << connections.getData(i).getTransfered() << endl;
-    }*/
+    feedForward(inputVals);
 }
 
 void Net::printNeurons(){

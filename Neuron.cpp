@@ -13,7 +13,7 @@ double sigmoidDerivatedFunction(double x){
 
 //Constructoras
 Neuron::Neuron():transfered(1),transferedPrime(0),graphReference(NULL),inGraphIndex(0),sumOfProducts(0),
-         miu(0.1),es(0),ed(0),squaredError(0),squaredErrorDerivative(0){}
+         miu(0.5),squaredError(0),squaredErrorDerivative(0){}
 Neuron::~Neuron(){
 //cout << "Neurona " << inGraphIndex << " Destruida" << endl;
 }
@@ -65,24 +65,63 @@ void Neuron::feedForward(){
     transferFunction(sumOfProducts);
 }//Realiza esas dos funciones
 
+
+
+void Neuron::cforO(double target){
+    //Calcula el error para cada conexion de la capa output
+    weightsUpdate.clear();//Primero limpiamos el vector
+    //(out - target)out(1-out)out
+    double ActivacionDeNeuronaAnterior;
+    squaredErrorDerivative = (transfered-target);
+    transferedPrime = transfered*(1-transfered);
+    for_each(predecessors.begin(),predecessors.end(),[this,&ActivacionDeNeuronaAnterior](uint32_t i){
+        ActivacionDeNeuronaAnterior = graphReference->getData(i).getTransfered();
+        weightsUpdate.push_back(squaredErrorDerivative*transferedPrime*ActivacionDeNeuronaAnterior);//Esto es lo que se va a actualizar ese arco por el error
+    });
+}
+void Neuron::cforH(){
+    //Calcula el error para cada conexion de la capa Oculta
+    weightsUpdate.clear();//Primero limpiamos el vector
+    //Primero sumamos para el error total de esta neurona
+    double tempError = 0;
+    double dErrorSiguiente;
+    double dActivationSiguiente;
+    double arcoSiguiente;
+    //Primero Calculamos el error total de esta neurona
+    for_each(succesors.begin(),succesors.end(),[this,&tempError,&dErrorSiguiente,&dActivationSiguiente,&arcoSiguiente](uint32_t i){
+        dErrorSiguiente = graphReference->getData(i).squaredErrorDerivative;
+        dActivationSiguiente = graphReference->getData(i).transferedPrime;
+        arcoSiguiente = graphReference->costoArco(inGraphIndex,i);//El arco desde esta neurona a la siguiente
+        tempError += dErrorSiguiente*dActivationSiguiente*arcoSiguiente;
+    });
+    transferedPrime = transfered*(1-transfered);//Derivamos la funcion de activacion de esta neurona
+    double ActivacionDeNeuronaAnterior;
+    for_each(predecessors.begin(),predecessors.end(),[this,&ActivacionDeNeuronaAnterior,&tempError](uint32_t i){
+        ActivacionDeNeuronaAnterior = graphReference->getData(i).getTransfered();
+        weightsUpdate.push_back(tempError*transferedPrime*ActivacionDeNeuronaAnterior);//Esto es lo que se va a actualizar ese arco por el error
+    });
+}
+
 void Neuron::calculateSquaredError(double target){
     squaredError = (pow((target - transfered),2))/2;//transfered es el output
 }
 void Neuron::calculateSquaredErrorDerivative(double target){
-    squaredErrorDerivative = (transfered - target);//-(target - out)
+    squaredErrorDerivative = -(target-transfered);//-(target - out)
 }
 void Neuron::calculatedOutdNet(){
     transferedPrime = transfered*(1-transfered);
 }
 void Neuron::calculatedNetdWi(){
+    dNetdWi.clear();
     for_each(predecessors.begin(),predecessors.end(),[this](uint32_t i){
         dNetdWi.push_back(graphReference->getData(i).getTransfered());
     });
 }
 void Neuron::calculatedEtotaldWi(){
+    weightsUpdate.clear();
     for_each(dNetdWi.begin(),dNetdWi.end(),[this](double i){
         //i es el valor de activacion de la neurona anterior
-        weightsUpdate.push_back(i*squaredErrorDerivative*transferedPrime);
+        weightsUpdate.push_back(squaredErrorDerivative*transferedPrime*i);//TODO COMO QUE NO SE GUARDA PORQUE ES MIERDA
     });
 }
 double Neuron::getSquaredError()const{
@@ -113,19 +152,25 @@ void Neuron::calculateSquaredErrorDerivativeH(){
     });
 }
 
+void Neuron::printWeightsUpdates(){
+    cout << "--------Neuron " << inGraphIndex << "--------"<<endl;
+    uint32_t j = 0;
+    assert(predecessors.size() == weightsUpdate.size());
+    for_each(weightsUpdate.begin(),weightsUpdate.end(),[this,&j](double i){cout << "Arco: " <<predecessors.at(j++)<<","<<inGraphIndex<<" -> "<< i <<endl;});
+}
+void Neuron::printPredeccessors(){
+    cout << "Neuron "<<inGraphIndex<<" Predecesores"<<endl;
+    for_each(predecessors.begin(),predecessors.end(),[](uint32_t i){cout << i << ", ";});
+    cout << endl;
+}
+void Neuron::printSuccessors(){
+    cout << "Neuron "<<inGraphIndex<<" Sucesores" << endl;
+    for_each(succesors.begin(),succesors.end(),[](uint32_t i){cout << i << ", ";});
+    cout << endl;
+}
+
 uint32_t Neuron::getIndex()const{return inGraphIndex;}//Retorna el index de esta neurona en el grafo
 
-///NEW///
-double Neuron::getES()const{return es;}
-double Neuron::getED()const{return ed;}
-
-//Calculate es
-void Neuron::calculateED(){
-    ed = 0;
-    for_each(predecessors.begin(),predecessors.end(),[this](uint32_t i){
-        ed += es * graphReference->getData(i).transfered;
-    });
-}
 void Neuron::updateWeights(){
     uint32_t j = 0;
     double temp;

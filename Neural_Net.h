@@ -10,9 +10,6 @@
 #include <cassert>
 #include "Neuron.h"
 #include "Bias_Neuron.h"
-#include "Input_Neuron.h"
-#include "Hidden_Neuron.h"
-#include "Output_Neuron.h"
 #include "Graph/Graph.h"
 #include "Topology.h"
 
@@ -26,7 +23,7 @@ public:
     //ResultLayers contiene lo del resultado.
     Net(Topology topology);
 
-    void train(const vector<double> &inputVals, const vector<double> &wantedVal);//TODO INVENTATELA. UTILIZA backPropagation y feedForward
+    void train(const vector<vector<double>> &inputVals, const vector<vector<double>> &wantedVal, uint32_t times);//TODO INVENTATELA. UTILIZA backPropagation y feedForward
 
     void setInputLayer(const vector<double> &inputVals);
     void feedForward(const vector<double> &inputVals);//Activa las neuronas y cada neurona sala su sumatoria de las anteriores por sus arcos
@@ -35,6 +32,10 @@ public:
     void calculateErrorDerivative(vector<double>&targetVals);//TODO HACIENDO ESTA!!!! No se usa porque calculamos la derivada en la funcion anterior
 
     void updateWeights();
+
+    void printAllWeightsUpdates();
+    void printAllPredecessors();
+    void printAllSuccessors();
 
     double getError(){return totalSquaredError;}
 
@@ -45,6 +46,7 @@ public:
 
 private:
     double totalSquaredError;
+    vector<double> lastResult;
 
     Graph<Neuron,double> connections;
     uint32_t nBiasLayers;
