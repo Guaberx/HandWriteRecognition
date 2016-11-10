@@ -2,7 +2,14 @@
 // Created by Guaberx on 11/4/2016.
 //
 #include "Neural_Net.h"
-#define DEBUG2 1
+#define DEBUG2 0
+double RandomDouble(double a, double b) {
+    //Retorna un valor aleatorio de tipo double entre a y b
+    double random = ((double) rand()) / (double) RAND_MAX;
+    double diff = b - a;
+    double r = random * diff;
+    return a + r;
+}
 Net::Net(Topology topology)
         :totalSquaredError(0),
          nInputLayers(topology.getNInputLayers()),
@@ -24,13 +31,13 @@ Net::Net(Topology topology)
     //Set Connections from input and bias layers to hiddelLayer
     for (int j = 1+1+nInputLayers; j < 1+1+nInputLayers+nHiddenLayers; ++j) {
         for (int i = 0; i < 1+nInputLayers; ++i) {//Comienza desde 0 para tomar el bias
-            connections.setArco(i,j,rand()/double(RAND_MAX));
+            connections.setArco(i,j,RandomDouble(-100,100));
         }
     }
     //Set Connections from Hidden layer to Result Layer
     for (int j = 1+1+nInputLayers+nHiddenLayers; j < totalNeurons; ++j) {
         for (int i = 1+nInputLayers; i < 1+1+nInputLayers+nHiddenLayers; ++i) {
-            connections.setArco(i,j,rand()/double(RAND_MAX));
+            connections.setArco(i,j,RandomDouble(-100,100));
         }
     }
     //Predecesores, succesores y el index en el grafo de cada neurona
@@ -169,6 +176,13 @@ void Net::backPropagation(const vector<double> &targetVals) {
 
 vector<double> Net::getResult(vector<double> &inputVals) {
     feedForward(inputVals);
+    vector<double> result;
+    cout << "Result:\t";
+    for (int i = 2+nInputLayers+nHiddenLayers; i < totalNeurons; ++i) {
+        cout << "<" << connections.getData(i).getTransfered() <<">";
+        result.push_back(connections.getData(i).getTransfered());
+    }cout << "\t\tMSE:\t"<< totalSquaredError << endl;
+    return move(result);
 }
 
 void Net::printNeurons(){

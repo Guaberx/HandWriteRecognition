@@ -24,23 +24,19 @@ public:
     Net(Topology topology);
 
     void train(const vector<vector<double>> &inputVals, const vector<vector<double>> &wantedVal, uint32_t times);//TODO INVENTATELA. UTILIZA backPropagation y feedForward
+    vector<double> getResult(vector<double> &inputVals);//TODO Simplemente es feedForward y que retorne la capa de salida de la red
 
+private:
     void setInputLayer(const vector<double> &inputVals);
     void feedForward(const vector<double> &inputVals);//Activa las neuronas y cada neurona sala su sumatoria de las anteriores por sus arcos
-
     void calculateError(vector<double>&targetVals);//TODO HACIENDO ESTA!!!!
     void calculateErrorDerivative(vector<double>&targetVals);//TODO HACIENDO ESTA!!!! No se usa porque calculamos la derivada en la funcion anterior
-
     void updateWeights();
-
     void printAllWeightsUpdates();
     void printAllPredecessors();
     void printAllSuccessors();
-
     double getError(){return totalSquaredError;}
-
     void backPropagation(const vector<double> &targetVals);//Calculate the error for each output neuron //TODO AQUI SE LLAMA LA FUNCION algo() DE CADA NEURONA
-    vector<double> getResult(vector<double> &inputVals);//TODO Simplemente es feedForward y que retorne la capa de salida de la red
     void printNeurons();//Imprime el vector del grafo
     void printConnections();//Imprime la matriz del grafo
 
